@@ -1,9 +1,10 @@
 __precompile__()
+
 module GroveAlg
 
-# Grove Algebra by Michael Reed (2017)
+# GroveAlg Copyright (C) 2017 Michael Reed
 
-export PBTree, Grove, GroveBin, GroveTree, ==, ===, GroveSort, GroveSort!, GroveIndex, BranchLeft, BranchRight, TreeCheck, GroveCheck, GroveError, TreeIndex, TreeIndexCn, Cn, GroveBit, TreeInteger, TreeRational, TreeShift, Graft, ⊣, ⊢, +, σ, GrovePart, GrovePrint
+export PBTree, Grove, GroveBin, ==, ===, GroveSort, GroveSort!, BranchLeft, BranchRight, TreeCheck, GroveCheck, GroveError, TreeIndex, TreeIndexCn, Cn, GroveIndex, GroveBit, TreeInteger, TreeRational, TreeShift, Graft, ⊣, ⊢, +, σ, GrovePart, GrovePrint
 
 abstract AbstractGrove; importall Base; using Combinatorics
 type PBTree <: AbstractGrove; degr::UInt8; Y::Array{UInt8,1}; end
@@ -12,7 +13,7 @@ type GroveBin <: AbstractGrove; degr::UInt8; size::Int; gbin::Integer; ppos::Flo
 type BaseTree <: AbstractGrove; μ::Array{Array{UInt8,1},1}; end
 Ar1UI8I=Union{Array{UInt8,1},Array{Int,1}}; Ar2UI8I=Union{Array{UInt8,2},Array{Int,2}}
 AbstractPBTree = Union{PBTree,Ar1UI8I}; UI8I = Union{UInt8,Int}; Cn = catalannum
-NotGrove = Union{GroveBin,AbstractPBTree,Ar2UI8I,UI8I}; GroveTree = Union{Grove,NotGrove}
+NotGrove = Union{GroveBin,AbstractPBTree,Ar2UI8I,UI8I}
 
 PBTree(t::Ar1UI8I) = convert(PBTree,t)
 PBTree(deg::UI8I,ind::Int) = PBTree(UInt8(deg),Υ(deg).Y[ind,:])
@@ -22,7 +23,7 @@ Grove(t::PBTree) = convert(Grove,t); Grove(d::UI8I) = convert(Grove,d)
 Grove(d::UI8I,s::BitArray{1}) = TreeLoday(d,s); Grove(g::GroveBin) = convert(Grove,g)
 Grove(d::UI8I,s::Integer) = Grove(d,GroveBit(s))
 GroveBin(g::Grove) = GroveBin(UInt8(g.degr),g.size,GroveIndex(g))
-GroveBin(g::GroveTree) = GroveBin(convert(Grove,g))
+GroveBin(g::NotGrove) = GroveBin(convert(Grove,g))
 GroveBin(d::UI8I,s::Int,i::Integer) = GroveBin(UInt8(d),s,i,Float16(100i//(2^Cn(d)-1)))
 ==(a::Grove,b::Grove) = (a.degr == b.degr && a.size == b.size && a.Y == b.Y)
 ===(a::Grove,b::Grove) = (GroveSort!(a) == GroveSort!(b))
@@ -62,16 +63,16 @@ function ∨(L::PBTree,R::PBTree) # Graft()
 Graft(x::AbstractPBTree,y::AbstractPBTree) = x ∨ y
 function BranchLeft(t::PBTree); fx = findfirst(ξ->(ξ==t.degr),t.Y)
   fx>1 && (return PBTree(fx-1,t.Y[1:fx-1])); return PBTree(0x00,Array{UInt8,1}(0)); end
-BranchLeft(t::AbstractPBTree) = BranchLeft(convert(PBTree,t))
+BranchLeft(t::Ar1UI8I) = BranchLeft(convert(PBTree,t))
 function BranchRight(t::PBTree); fx = findfirst(ξ->(ξ==t.degr),t.Y)
   fx<t.degr && (return PBTree(t.Y[fx+1:end])); return PBTree(0x00,Array{UInt8,1}(0)); end
-BranchRight(t::AbstractPBTree) = BranchRight(convert(PBTree,t))
+BranchRight(t::Ar1UI8I) = BranchRight(convert(PBTree,t))
 LeftInherited(t::PBTree) = BranchRight(t).degr == 0
-LeftInherited(t::AbstractPBTree) = BranchRight(convert(PBTree,t))
+LeftInherited(t::Ar1UI8I) = BranchRight(convert(PBTree,t))
 RightInherited(t::PBTree) = BranchLeft(t).degr == 0
-RightInherited(t::AbstractPBTree) = BranchLeft(convert(PBTree,t))
+RightInherited(t::Ar1UI8I) = BranchLeft(convert(PBTree,t))
 PrimitiveTree(t::PBTree) = LeftInherited(t) || RightInherited(t)
-PrimitiveTree(t::AbstractPBTree) = PrimitiveTree(convert(PBTree,t))
+PrimitiveTree(t::Ar1UI8I) = PrimitiveTree(convert(PBTree,t))
 
 # Total Grove Repository
 
@@ -121,15 +122,15 @@ function GroveInteger!(Y::Array{Grove,1},R::Array{Array{Int,1},1},deg::UInt8)
 
 TreeCheck(d::UI8I,t::Int) = t > 0 && t <= Cn(d)
 TreeCheck(t::PBTree) = TreeCheck(t.degr,TreeIndex(t))
-TreeCheck(t::AbstractPBTree) = TreeCheck(convert(PBTree,t))
+TreeCheck(t::Ar1UI8I) = TreeCheck(convert(PBTree,t))
 TreeCheck(g::Grove) = findfirst(x->(x==0),TreeIndex(g)) == 0
-TreeCheck(g::GroveTree) = TreeCheck(convert(Grove,g))
+TreeCheck(g::NotGrove) = TreeCheck(convert(Grove,g))
 GroveCheck(d::UI8I,gi::Integer) = gi >= 0 && gi < 2^Cn(d)
 GroveCheck(g::Grove) = GroveCheck(g.degr,GroveIndex(g))
-GroveCheck(g::GroveTree) = GroveCheck(convert(Grove,g))
+GroveCheck(g::NotGrove) = GroveCheck(convert(Grove,g))
 GroveError(n::UI8I) = TreeIndex(n)-sortperm(TreeInteger(n))
 GroveError(g::Grove) = [1:g.size...]-sortperm(TreeInteger(g))
-GroveError(g::GroveTree) = convert(Grove,g)
+GroveError(g::NotGrove) = convert(Grove,g)
 
 # TreeIndex()
 
@@ -221,7 +222,7 @@ function TreeInteger(Y::Array{BaseTree,1})
 function TreeInteger(Y::Array{Array{BaseTree,1},1})
   γ = length(Y); i = Array{Array{Int,1},1}(γ)
   for n ∈ 1:γ; i[n] = TreeInteger(Y[n]); end; return i; end;
-TreeInteger(g::Union{GroveTree,Array}) = TreeInteger(TreeBase(g))
+TreeInteger(g::Union{Grove,NotGrove,Array}) = TreeInteger(TreeBase(g))
 TreeInteger(deg::UI8I) = ΥI(deg);
 
 # TreeRational()
@@ -255,7 +256,7 @@ function ⊣(x::PBTree,y::Grove); γ = y.size; gr = Array{Array,1}(γ)
   for i ∈ 1:γ; gr[i] = (x ⊣ PBTree(y.Y[i,:])).Y; end; return Grove(vcat(gr...)); end
 function ⊣(x::Grove,y::Grove); γ = x.size; gr = Array{Array,1}(γ)
   for i ∈ 1:γ; gr[i] = (PBTree(x.Y[i,:]) ⊣ y).Y; end; return Grove(vcat(gr...)); end
-⊣(x::GroveTree,y::GroveTree) = Grove(x) ⊣ Grove(y)
+⊣(x::NotGrove,y::NotGrove) = Grove(x) ⊣ Grove(y)
 ⊣(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊣ PBTree(y)
 
 # Arithmetic (Right)
@@ -270,7 +271,7 @@ function ⊢(x::Grove,y::PBTree); γ = x.size; gr = Array{Array,1}(γ)
   for i ∈ 1:γ; gr[i] = (PBTree(x.Y[i,:]) ⊢ y).Y; end; return Grove(vcat(gr...)); end
 function ⊢(x::Grove,y::Grove); γ = x.size; gr = Array{Array,1}(γ);
   for i ∈ 1:γ; gr[i] = (PBTree(x.Y[i,:]) ⊢ y).Y; end; return Grove(vcat(gr...)); end
-⊢(x::GroveTree,y::GroveTree) = Grove(x) ⊢ Grove(y)
+⊢(x::NotGrove,y::NotGrove) = Grove(x) ⊢ Grove(y)
 ⊢(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊢ PBTree(y)
 
 # Grove addition
@@ -287,9 +288,9 @@ function +(x::Grove,y::Grove)
 +(x::NotGrove,y::Grove) = convert(Grove,x) + y
 +(x::Union{GroveBin,PBTree},y::Union{GroveBin,PBTree}) = Grove(x) + Grove(y);
 
-# Grove Partition
+# Grove Composition
 
-function GrovePart(n::Int,η::Int=n)
+function GroveComposition(n::Int,η::Int=n)
   G = GroveSums(n); u=1
   !isempty(G) && (return G)
   n < η && (u = 2^Cn(n))
@@ -329,4 +330,4 @@ GrovePrint(Y::Array{Grove,1}) = for n ∈ 1:length(Y); GrovePrint(Y[n]); end
 GrovePrint(Y::Array{Array{BaseTree,1},1}) = for n ∈ 1:length(Y); GrovePrint(Y[n]); end
 GrovePrint(deg::UI8I) = GrovePrint(Υ(deg)); # given deg
 
-end # module
+end
