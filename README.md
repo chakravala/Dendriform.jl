@@ -1,4 +1,5 @@
 # GroveAlg
+Compute using Loday's dendriform dialgebra based arithmetic on groves of planar binary trees (using this package extending the Julia language). Uses efficient planar binary tree indexing algorithm to compute partial grove indices. 
 
 [![Build Status](https://travis-ci.org/chakravala/GroveAlg.jl.svg?branch=master)](https://travis-ci.org/chakravala/GroveAlg.jl)
 
