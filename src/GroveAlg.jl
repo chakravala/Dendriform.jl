@@ -1,5 +1,4 @@
 __precompile__()
-
 module GroveAlg
 
 # GroveAlg Copyright (C) 2017 Michael Reed
@@ -316,9 +315,10 @@ function σ(Y::Array{Grove,1}); γ = length(Y);
 # Tree Label Print
 
 function GrovePrint(υ::PBTree,μ::BaseTree)
-  n=υ.degr; show(convert(Array{Int,1},υ.Y)); print(" ↦ "); for ω ∈ 1:length(υ.Y)
+  n=υ.degr; ti=TreeInteger(μ); tin=TreeIndex(n,ti)
+  show(convert(Array{Int,1},υ.Y)); print(" ↦ "); for ω ∈ 1:length(υ.Y)
     μ.μ[ω]==[] ? print('∅') : show(convert(Array{Int,1},μ.μ[ω])); end; print(" ↦ ")
-  ti=TreeInteger(μ); show(ti); print(" or ",TreeIndex(n,ti),"/",Cn(n)); end
+  show(ti); print(" or ",tin,"/",Cn(n)); end
 GrovePrint(υ::PBTree) = GrovePrint(υ,TreeBase(υ));
 GrovePrint(μ::BaseTree) = GrovePrint(TreeLoday(μ),μ);
 function GrovePrint(Y::Grove) # given Loday label grove
