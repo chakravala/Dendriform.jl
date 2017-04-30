@@ -3,7 +3,7 @@ module GroveAlg
 
 # GroveAlg Copyright (C) 2017 Michael Reed
 
-export PBTree, Grove, GroveBin, ==, ===, GroveSort, GroveSort!, BranchLeft, BranchRight, TreeCheck, GroveCheck, GroveError, TreeIndex, TreeIndexCn, Cn, GroveIndex, GroveBit, TreeInteger, TreeRational, TreeShift, Graft, ⊣, ⊢, +, σ, GrovePart, GrovePrint
+export PBTree, Grove, GroveBin, ==, GroveSort, GroveSort!, BranchLeft, BranchRight, TreeCheck, GroveCheck, GroveError, TreeIndex, TreeIndexCn, Cn, GroveIndex, GroveBit, TreeInteger, TreeRational, TreeShift, Graft, ⊣, ⊢, +, σ, GrovePart, GrovePrint
 
 abstract AbstractGrove; importall Base; using Combinatorics
 type PBTree <: AbstractGrove; degr::UInt8; Y::Array{UInt8,1}; end
@@ -24,8 +24,7 @@ Grove(d::UI8I,s::Integer) = Grove(d,GroveBit(s))
 GroveBin(g::Grove) = GroveBin(UInt8(g.degr),g.size,GroveIndex(g))
 GroveBin(g::NotGrove) = GroveBin(convert(Grove,g))
 GroveBin(d::UI8I,s::Int,i::Integer) = GroveBin(UInt8(d),s,i,Float16(100i//(2^Cn(d)-1)))
-==(a::Grove,b::Grove) = (a.degr == b.degr && a.size == b.size && a.Y == b.Y)
-===(a::Grove,b::Grove) = (GroveSort!(a) == GroveSort!(b))
+==(a::Grove,b::Grove)=(a.degr==b.degr && a.size==b.size && GroveSort!(a).Y==GroveSort!(b).Y)
 
 # Conversions / Promotions
 
