@@ -3,7 +3,7 @@ module GroveAlg
 
 # GroveAlg Copyright (C) 2017 Michael Reed
 
-export PBTree, Grove, GroveBin, ==, GroveSort, GroveSort!, BranchLeft, BranchRight, TreeCheck, GroveCheck, GroveError, TreeIndex, TreeIndexCn, Cn, GroveIndex, GroveBit, TreeInteger, TreeRational, TreeShift, Graft, ⊣, ⊢, +, σ, GrovePart, GrovePrint
+export PBTree, Grove, GroveBin, ==, GroveSort, GroveSort!, BranchLeft, BranchRight, TreeCheck, GroveCheck, GroveError, TreeIndex, TreeIndexCn, Cn, GroveIndex, GroveBit, TreeInteger, TreeRational, TreeShift, Graft, ⊣, ⊢, +, σ, GroveComposition, GrovePrint
 
 abstract AbstractGrove; importall Base; using Combinatorics
 type PBTree <: AbstractGrove; degr::UInt8; Y::Array{UInt8,1}; end
@@ -24,7 +24,9 @@ Grove(d::UI8I,s::Integer) = Grove(d,GroveBit(s))
 GroveBin(g::Grove) = GroveBin(UInt8(g.degr),g.size,GroveIndex(g))
 GroveBin(g::NotGrove) = GroveBin(convert(Grove,g))
 GroveBin(d::UI8I,s::Int,i::Integer) = GroveBin(UInt8(d),s,i,Float16(100i//(2^Cn(d)-1)))
+==(a::PBTree,b::PBTree)=(a.degr == b.degr && a.Y == b.Y)
 ==(a::Grove,b::Grove)=(a.degr==b.degr && a.size==b.size && GroveSort!(a).Y==GroveSort!(b).Y)
+
 
 # Conversions / Promotions
 
@@ -66,9 +68,9 @@ function BranchRight(t::PBTree); fx = findfirst(ξ->(ξ==t.degr),t.Y)
   fx<t.degr && (return PBTree(t.Y[fx+1:end])); return PBTree(0x00,Array{UInt8,1}(0)); end
 BranchRight(t::Ar1UI8I) = BranchRight(convert(PBTree,t))
 LeftInherited(t::PBTree) = BranchRight(t).degr == 0
-LeftInherited(t::Ar1UI8I) = BranchRight(convert(PBTree,t))
+LeftInherited(t::Ar1UI8I) = LeftInherited(convert(PBTree,t))
 RightInherited(t::PBTree) = BranchLeft(t).degr == 0
-RightInherited(t::Ar1UI8I) = BranchLeft(convert(PBTree,t))
+RightInherited(t::Ar1UI8I) = RightInherited(convert(PBTree,t))
 PrimitiveTree(t::PBTree) = LeftInherited(t) || RightInherited(t)
 PrimitiveTree(t::Ar1UI8I) = PrimitiveTree(convert(PBTree,t))
 
@@ -225,15 +227,14 @@ TreeInteger(deg::UI8I) = ΥI(deg);
 
 # TreeRational()
 
-TreeRational(d::UI8I,s::Integer) = TreeRational(d,GroveBit(find(s)))
-function TreeRational(d::UI8I,ind::BitArray) # from TreeIndex
-  y = ΥI(d); g = Array{Int,1}(length(ind)); c = 1;
+TreeRational(d::UI8I,s::Integer) = TreeRational(d,GroveBit(s))
+function TreeRational(d::UI8I,indb::BitArray) # from TreeIndex
+  y = ΥI(d); g = Array{Int,1}(length(indb)); c = 1; ind = find(indb)
   for i ∈ ind; g[c] = y[i]; c +=1; end; return TreeRational(d,g); end
 TreeRational(μ::BaseTree) = (s=TreeShift(); s+((-1)^s)*ΘInt(μ.μ)//ΘMax(length(μ.μ)))
-TreeRational(deg::UI8I,Θ::Int) = (s=TreeShift(); s+((-1)^s)*Θ//ΘMax(deg))
-TreeRational(deg::UI8I,Θ::Array{Int,1}) = (s=TreeShift(); s+((-1)^s)*Θ.//ΘMax(deg))
-function TreeRational(Y::Array{BaseTree,1})
-  γ = length(Y); r = Array{Rational,1}(γ)
+TreeRational(deg::UI8I,Θ::Int) = (s=TreeShift(); 1-s-((-1)^s)*Θ//ΘMax(deg))
+TreeRational(deg::UI8I,Θ::Array{Int,1}) = (s=TreeShift(); 1-s-((-1)^s)*Θ.//ΘMax(deg))
+function TreeRational(Y::Array{BaseTree,1}); γ = length(Y); r = Array{Rational,1}(γ)
   for n ∈ 1:γ; r[n] = TreeRational(Y[n]); end; return r; end;
 function TreeRational(Y::Array{Array{BaseTree,1},1})
   γ = length(Y); r = Array{Array{Rational,1},1}(γ)
@@ -295,7 +296,7 @@ function GroveComposition(n::Int,η::Int=n)
   n != 0 && n < η && for i∈1:u-1; push!(G,[(n,i),(n,i)]); end;
   for s ∈ n-1:-1:1
     for i ∈ 1:2^Cn(s)-1
-      g = GrovePart(n-s,η); gsi = Grove(s,i);
+      g = GroveComposition(n-s,η); gsi = Grove(s,i);
       for r ∈ 1:length(g)
         deg = g[r][end][1]; gi = g[r][end][2]
         sm = gsi + Grove(deg,gi);
@@ -307,8 +308,8 @@ function GroveComposition(n::Int,η::Int=n)
 
 # Involution
 
-σ(x::PBTree) = x.Y[end:-1:1]; σ(x::Grove) = x.Y[:,end:-1:1]; σ(x::Any) = σ(Grove(x))
-function σ(Y::Array{Grove,1}); γ = length(Y);
+σ(x::PBTree) = PBTree(x.Y[end:-1:1]); σ(x::Grove) = Grove(x.Y[:,end:-1:1]);
+σ(x::Any) = σ(Grove(x)); function σ(Y::Array{Grove,1}); γ = length(Y);
   r = Array{Grove,1}(γ); for n∈1:γ; r[n] = σ(Y[n]); end; return r; end
 
 # Tree Label Print
