@@ -1,6 +1,8 @@
 # GroveAlg
 Compute using Loday's dendriform dialgebra based arithmetic on groves of planar binary trees (using this package extending the Julia language). Uses efficient planar binary tree indexing algorithm to compute partial grove indices. 
 
+[![Build Status](https://travis-ci.org/chakravala/GroveAlg.jl.svg?branch=master)](https://travis-ci.org/chakravala/GroveAlg.jl) [![Coverage Status](https://coveralls.io/repos/chakravala/GroveAlg.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/chakravala/GroveAlg.jl?branch=master) [![codecov.io](http://codecov.io/github/chakravala/GroveAlg.jl/coverage.svg?branch=master)](http://codecov.io/github/chakravala/GroveAlg.jl?branch=master)
+
 Installation using Julia:
 
 ```Julia
@@ -26,8 +28,3 @@ julia> GrovePrint(Grove(3,7)+[1,4,2,1])
 [1,3,1,4,7,2,1] ↦ [5]∅∅[4][2][6][1,3,7] ↦ 2228184 or 180/429
 Y7 #12/429, Grove [0.0%] 3978889433292738744351684718788268955154180851751998187580930331583304832228744501395456
 ```
-[![Build Status](https://travis-ci.org/chakravala/GroveAlg.jl.svg?branch=master)](https://travis-ci.org/chakravala/GroveAlg.jl)
-
-[![Coverage Status](https://coveralls.io/repos/chakravala/GroveAlg.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/chakravala/GroveAlg.jl?branch=master)
-
-[![codecov.io](http://codecov.io/github/chakravala/GroveAlg.jl/coverage.svg?branch=master)](http://codecov.io/github/chakravala/GroveAlg.jl?branch=master)
