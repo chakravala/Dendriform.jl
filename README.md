@@ -27,4 +27,4 @@ julia> GrovePrint(Grove(3,7)+[1,4,2,1])
 [1,3,1,4,7,2,1] ↦ [5]∅∅[4][2][6][1,3,7] ↦ 2228184 or 180/429
 Y7 #12/429, Grove [0.0%] 3978889433292738744351684718788268955154180851751998187580930331583304832228744501395456
 ```
-To use the latest `master` branch do `Pkg.checkout("GroveAlg")` and to switch back to current release do `Pkg.free("GroveAlg")`.
+To use the latest `master` branch do `Pkg.checkout("GroveAlg")` and to switch to release version `Pkg.free("GroveAlg")`.
