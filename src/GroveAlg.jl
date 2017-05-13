@@ -51,7 +51,7 @@ GroveSort!(g::Grove) = GroveSort!(g.Y,TreeInteger(g))
 GroveSort!(g::NotGrove) = GroveSort!(convert(Grove,g))
 GroveSort!(g::Ar2UI8I,Θ::Array{Int,1}) = GroveSort!(Grove(g),Θ)
 GroveSort!(g::Grove,Θ::Array{Int,1}) = (g.Y[:,:] = g.Y[sortperm(Θ),:]; g)
-GroveSort = (()->(gs=true; return (tf=gs)->(gs!=tf && (gs=tf; ΥGS()); return gs)))()
+GroveSort = (()->(gs=true; return (tf=gs)->(gs≠tf && (gs=tf; ΥGS()); return gs)))()
 
 # Grafting
 
@@ -89,16 +89,16 @@ function GroveExtend!(Y::Array{Grove,1},R::Array{Array{Int,1},1},deg::UInt8)
     for ν ∈ n-1:-1:cn+1 # loop over (right) root indices
       τ=GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,1,Y[ν].size,1,Y[n-ν+1].size)
     end # loop over center root next (if n is odd)
-    cn != fn && for ν = cn
+    cn ≠ fn && for ν = cn
       λs = length(Y[ν].Y[:,1]); Λs = length(Y[n-ν+1].Y[:,1])
       fλs = floor(Int,λs/2); cλs = ceil(Int,λs/2)
       fΛs = floor(Int,Λs/2); cΛs = ceil(Int,Λs/2)
       τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,1,fλs,1,fΛs)
-      cΛs != fΛs && (τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,1,fλs,cΛs,cΛs))
+      cΛs ≠ fΛs && (τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,1,fλs,cΛs,cΛs))
       τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,1,fλs,cΛs+1,Λs)
-      cλs != fλs && (τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,cλs,cλs,1,Λs))
+      cλs ≠ fλs && (τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,cλs,cλs,1,Λs))
       τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,cλs+1,λs,1,fΛs)
-      cΛs != fΛs && (τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,cλs+1,λs,cΛs,cΛs))
+      cΛs ≠ fΛs && (τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,cλs+1,λs,cΛs,cΛs))
       τ = GroveBuild!(Y[ν].Y,Y[n-ν+1].Y,Yn.Y,ν,n,τ,cλs+1,λs,cΛs+1,Λs); end
     for ν ∈ fn:-1:2 # loop over (right) root indices
       for Λ ∈ 1:Y[n-ν+1].size # loop over right grove
@@ -130,7 +130,7 @@ GroveCheck(g::Grove) = GroveCheck(g.degr,GroveIndex(g))
 GroveCheck(g::NotGrove) = GroveCheck(convert(Grove,g))
 GroveError(n::UI8I) = TreeIndex(n)-sortperm(TreeInteger(n))
 GroveError(g::Grove) = [1:g.size...]-sortperm(TreeInteger(g))
-GroveError(g::NotGrove) = convert(Grove,g)
+GroveError(g::NotGrove) = convert(Grove,g) |> GroveError
 
 # TreeIndex()
 
@@ -173,9 +173,9 @@ function TreeLoday(υ::BaseTree) # from TreeBase
 function TreeLoday(Y::Array{BaseTree,1})
   γ = length(Y); L = Grove(Array{UInt8,2}(γ,length(Y[1].μ[:])))
   for η ∈ 1:γ; L.Y[η,:] = (TreeLoday(Y[η])).Y; end; return L; end;
-function TreeLoday(Y::Array{Array{BaseTree,1},1})
-  γ = length(Y); L = Array{Grove,1}(γ)
-  for n ∈ 1:γ; L[n] = TreeLoday(Y[n]); end; return L; end;
+#function TreeLoday(Y::Array{Array{BaseTree,1},1})
+#  γ = length(Y); L = Array{Grove,1}(γ)
+#  for n ∈ 1:γ; L[n] = TreeLoday(Y[n]); end; return L; end;
 TreeLoday(deg::UI8I,ind::Int) = TreeLoday(deg,[ind]) # TreeIndex
 TreeLoday(deg::UI8I) = Υ(deg); # from degree
 TreeLoday(d::UI8I,s::Integer) = Grove(d,s)
@@ -219,9 +219,9 @@ TreeInteger(μ::BaseTree) = ΘMax(length(μ.μ))-ΘInt(μ.μ)
 function TreeInteger(Y::Array{BaseTree,1})
   γ = length(Y); i = Array{Int,1}(γ)
   for n ∈ 1:γ; i[n] = TreeInteger(Y[n]); end; return i; end;
-function TreeInteger(Y::Array{Array{BaseTree,1},1})
-  γ = length(Y); i = Array{Array{Int,1},1}(γ)
-  for n ∈ 1:γ; i[n] = TreeInteger(Y[n]); end; return i; end;
+#function TreeInteger(Y::Array{Array{BaseTree,1},1})
+#  γ = length(Y); i = Array{Array{Int,1},1}(γ)
+#  for n ∈ 1:γ; i[n] = TreeInteger(Y[n]); end; return i; end;
 TreeInteger(g::Union{Grove,NotGrove,Array}) = TreeInteger(TreeBase(g))
 TreeInteger(deg::UI8I) = ΥI(deg);
 
@@ -229,19 +229,19 @@ TreeInteger(deg::UI8I) = ΥI(deg);
 
 TreeRational(d::UI8I,s::Integer) = TreeRational(d,GroveBit(s))
 function TreeRational(d::UI8I,indb::BitArray) # from TreeIndex
-  y = ΥI(d); g = Array{Int,1}(length(indb)); c = 1; ind = find(indb)
+  y = ΥI(d); c = 1; ind = find(indb); g = Array{Int,1}(length(ind));
   for i ∈ ind; g[c] = y[i]; c +=1; end; return TreeRational(d,g); end
 TreeRational(μ::BaseTree) = (s=TreeShift(); s+((-1)^s)*ΘInt(μ.μ)//ΘMax(length(μ.μ)))
-TreeRational(deg::UI8I,Θ::Int) = (s=TreeShift(); 1-s-((-1)^s)*Θ//ΘMax(deg))
+#TreeRational(deg::UI8I,Θ::Int) = (s=TreeShift(); 1-s-((-1)^s)*Θ//ΘMax(deg))
 TreeRational(deg::UI8I,Θ::Array{Int,1}) = (s=TreeShift(); 1-s-((-1)^s)*Θ.//ΘMax(deg))
 function TreeRational(Y::Array{BaseTree,1}); γ = length(Y); r = Array{Rational,1}(γ)
   for n ∈ 1:γ; r[n] = TreeRational(Y[n]); end; return r; end;
-function TreeRational(Y::Array{Array{BaseTree,1},1})
-  γ = length(Y); r = Array{Array{Rational,1},1}(γ)
-  for n ∈ 1:γ; r[n] = TreeRational(Y[n]); end; return r; end;
+#function TreeRational(Y::Array{Array{BaseTree,1},1})
+#  γ = length(Y); r = Array{Array{Rational,1},1}(γ)
+#  for n ∈ 1:γ; r[n] = TreeRational(Y[n]); end; return r; end;
 TreeRational(deg::UI8I) = TreeRational(deg,TreeInteger(deg));
 TreeRational(υ::Any) = TreeRational(TreeBase(υ));
-TreeShift = (()->(gs=true; return (tf=gs)->(gs!=tf && (gs=tf); return Int(gs))))()
+TreeShift = (()->(gs=true; return (tf=gs)->(gs≠tf && (gs=tf); return Int(gs))))()
 
 # Arithmetic (Left)
 
@@ -293,7 +293,7 @@ function GroveComposition(n::Int,η::Int=n)
   G = GroveSums(n); u=1
   !isempty(G) && (return G)
   n < η && (u = 2^Cn(n))
-  n != 0 && n < η && for i∈1:u-1; push!(G,[(n,i),(n,i)]); end;
+  n ≠ 0 && n < η && for i∈1:u-1; push!(G,[(n,i),(n,i)]); end;
   for s ∈ n-1:-1:1
     for i ∈ 1:2^Cn(s)-1
       g = GroveComposition(n-s,η); gsi = Grove(s,i);
@@ -327,7 +327,7 @@ function GrovePrint(Y::Grove) # given Loday label grove
 function GrovePrint(Y::Array{BaseTree,1}) # given Index label grove
   for η ∈ 1:length(Y); GrovePrint(Y[η]); print('\n'); end; end;
 GrovePrint(Y::Array{Grove,1}) = for n ∈ 1:length(Y); GrovePrint(Y[n]); end
-GrovePrint(Y::Array{Array{BaseTree,1},1}) = for n ∈ 1:length(Y); GrovePrint(Y[n]); end
+#GrovePrint(Y::Array{Array{BaseTree,1},1}) = for n ∈ 1:length(Y); GrovePrint(Y[n]); end
 GrovePrint(deg::UI8I) = GrovePrint(Υ(deg)); # given deg
 
 end
