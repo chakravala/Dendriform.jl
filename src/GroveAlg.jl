@@ -26,7 +26,7 @@ GroveBin(g::NotGrove) = GroveBin(convert(Grove,g))
 GroveBin(d::UI8I,s::Int,i::Integer) = GroveBin(UInt8(d),s,i,Float16(100i//(2^Cn(d)-1)))
 ==(a::PBTree,b::PBTree)=(a.degr == b.degr && a.Y == b.Y)
 ==(a::Grove,b::Grove)=(a.degr==b.degr && a.size==b.size && GroveSort!(a).Y==GroveSort!(b).Y)
-
+==(a::BaseTree,b::BaseTree)=(a.μ==b.μ)
 
 # Conversions / Promotions
 
@@ -41,8 +41,8 @@ function convert(::Type{Grove},g::Ar2UI8I)
 convert(::Type{Grove},t::Ar1UI8I) = Grove(PBTree(convert(Array{UInt8,1},t)))
 convert(::Type{Grove},g::GroveBin) = Grove(g.degr,g.gbin)
 convert(::Type{Grove},d::UI8I) = Υ(UInt8(d))
-promote_rule(::Type{PBTree},::Type{Ar1UI8I}) = PBTree
-promote_rule(::Type{Grove},::Type{Union{Ar1UI8I,Ar2UI8I,PBTree,UI8I}})=Grove
+#promote_rule(::Type{PBTree},::Type{Ar1UI8I}) = PBTree
+#promote_rule(::Type{Grove},::Type{Union{Ar1UI8I,Ar2UI8I,PBTree,UI8I}})=Grove
 show(io::IO,k::GroveBin) = print(io,"Y$(k.degr) \#$(k.size)/$(Cn(k.degr)), Grove [$(k.ppos)\%] $(k.gbin)")
 
 # Sorting
@@ -176,7 +176,7 @@ function TreeLoday(Y::Array{BaseTree,1})
 #function TreeLoday(Y::Array{Array{BaseTree,1},1})
 #  γ = length(Y); L = Array{Grove,1}(γ)
 #  for n ∈ 1:γ; L[n] = TreeLoday(Y[n]); end; return L; end;
-TreeLoday(deg::UI8I,ind::Int) = TreeLoday(deg,[ind]) # TreeIndex
+#TreeLoday(deg::UI8I,ind::Int) = TreeLoday(deg,[ind]) # TreeIndex
 TreeLoday(deg::UI8I) = Υ(deg); # from degree
 TreeLoday(d::UI8I,s::Integer) = Grove(d,s)
 
@@ -195,9 +195,9 @@ function TreeBase(d::UI8I,γ::Int,g::Ar2UI8I); μ = Array{BaseTree,1}(γ)
   for η ∈ 1:γ; μ[η] = TreeBase(d,g[η,:]); end; return μ; end;
 TreeBase(g::Ar2UI8I) = TreeBase(GroveDeg(g),length(g[:,1]),g)
 TreeBase(g::Grove) = TreeBase(g.degr,g.size,g.Y)
-function TreeBase(Y::Union{Array{Ar2UI8I,1},Array{Grove,1}})
-  γ = length(Y); μ = Array{Array{BaseTree,1},1}(γ)
-  for n ∈ 1:γ; μ[n] = TreeBase(Y[n]); end; return μ; end;
+#function TreeBase(Y::Union{Array{Ar2UI8I,1},Array{Grove,1}})
+#  γ = length(Y); μ = Array{Array{BaseTree,1},1}(γ)
+#  for n ∈ 1:γ; μ[n] = TreeBase(Y[n]); end; return μ; end;
 TreeBase(deg::UI8I) = TreeBase(Υ(deg));
 
 # TreeBase -> Max Integer
@@ -308,9 +308,9 @@ function GroveComposition(n::Int,η::Int=n)
 
 # Involution
 
-σ(x::PBTree) = PBTree(x.Y[end:-1:1]); σ(x::Grove) = Grove(x.Y[:,end:-1:1]);
-σ(x::Any) = σ(Grove(x)); function σ(Y::Array{Grove,1}); γ = length(Y);
-  r = Array{Grove,1}(γ); for n∈1:γ; r[n] = σ(Y[n]); end; return r; end
+σ(x::Grove) = Grove(x.Y[:,end:-1:1]); σ(x::NotGrove) = σ(Grove(x));
+#σ(x::PBTree) = PBTree(x.Y[end:-1:1]); function σ(Y::Array{Grove,1}); γ = length(Y);
+#  r = Array{Grove,1}(γ); for n∈1:γ; r[n] = σ(Y[n]); end; return r; end
 
 # Tree Label Print
 
@@ -318,14 +318,14 @@ function GrovePrint(υ::PBTree,μ::BaseTree)
   n=υ.degr; ti=TreeInteger(μ); tin=TreeIndex(n,ti)
   show(convert(Array{Int,1},υ.Y)); print(" ↦ "); for ω ∈ 1:length(υ.Y)
     μ.μ[ω]==[] ? print('∅') : show(convert(Array{Int,1},μ.μ[ω])); end; print(" ↦ ")
-  show(ti); print(" or ",tin,"/",Cn(n)); end
+  show(ti); print(" or ",tin,"/",Cn(n)); print('\n'); end
 GrovePrint(υ::PBTree) = GrovePrint(υ,TreeBase(υ));
-GrovePrint(μ::BaseTree) = GrovePrint(TreeLoday(μ),μ);
+GrovePrint(μ::BaseTree) = GrovePrint(TreeLoday(μ),μ)
 function GrovePrint(Y::Grove) # given Loday label grove
-  for η ∈ 1:Y.size; GrovePrint(PBTree(Y.Y[η,:])); print('\n'); end
+  for η ∈ 1:Y.size; GrovePrint(PBTree(Y.Y[η,:])); end
   show(GroveBin(Y)); print("\n") end;
 function GrovePrint(Y::Array{BaseTree,1}) # given Index label grove
-  for η ∈ 1:length(Y); GrovePrint(Y[η]); print('\n'); end; end;
+  for η ∈ 1:length(Y); GrovePrint(Y[η]); end; end;
 GrovePrint(Y::Array{Grove,1}) = for n ∈ 1:length(Y); GrovePrint(Y[n]); end
 #GrovePrint(Y::Array{Array{BaseTree,1},1}) = for n ∈ 1:length(Y); GrovePrint(Y[n]); end
 GrovePrint(deg::UI8I) = GrovePrint(Υ(deg)); # given deg
