@@ -43,7 +43,7 @@ convert(::Type{Grove},g::GroveBin) = Grove(g.degr,g.gbin)
 convert(::Type{Grove},d::UI8I) = Υ(UInt8(d))
 #promote_rule(::Type{PBTree},::Type{Ar1UI8I}) = PBTree
 #promote_rule(::Type{Grove},::Type{Union{Ar1UI8I,Ar2UI8I,PBTree,UI8I}})=Grove
-show(io::IO,k::GroveBin) = print(io,"Y$(k.degr) \#$(k.size)/$(Cn(k.degr)), Grove [$(k.ppos)\%] $(k.gbin)")
+show(io::IO,k::GroveBin) = print(io,"$(k.gbin) Y$(k.degr) \#$(k.size)/$(Cn(k.degr)) [$(k.ppos)\%]")
 
 # Sorting
 
@@ -289,22 +289,29 @@ function +(x::Grove,y::Grove)
 
 # Grove Composition
 
-function GroveComposition(n::Int,η::Int=n)
+function GroveCompos(n::Int,η::Int=n)
   G = GroveSums(n); u=1
   !isempty(G) && (return G)
   n < η && (u = 2^Cn(n))
-  n ≠ 0 && n < η && for i∈1:u-1; push!(G,[(n,i),(n,i)]); end;
+  n ≠ 0 && n < η && for i∈1:u-1; push!(G,[GroveBin(Grove(n,i)),GroveBin(Grove(n,i))]); end;
   for s ∈ n-1:-1:1
     for i ∈ 1:2^Cn(s)-1
-      g = GroveComposition(n-s,η); gsi = Grove(s,i);
+      g = GroveCompos(n-s,η); gsi = Grove(s,i); gbsi = GroveBin(gsi)
       for r ∈ 1:length(g)
-        deg = g[r][end][1]; gi = g[r][end][2]
-        sm = gsi + Grove(deg,gi);
-        push!(G,g[r]); unshift!(G[u],(s,i));
-        G[u][end] = (UInt8(deg+s),GroveIndex(sm))
-        u += 1; end; end; end;
-  GroveStore(n,G); return G; end
-(GroveStore,GL,GroveSums) = (()->(GG=Array{Array{Array{Tuple{UInt8,Integer},1},1},1}(0); return ((n::Int,g::Array{Array{Tuple{UInt8,Integer},1},1})->(n==length(GG)+1 && (g)), ()->(return length(GG)), (n::Int)->(n<=length(GG) && n>0x00 ? (return GG[n]) : (return Array{Array{Tuple{UInt8,Integer},1},1}(0) )  ) )))()
+        sm = gsi + Grove(g[r][end].degr,g[r][end].gbin);
+        push!(G,g[r]); unshift!(G[u],gbsi);
+        G[u][end] = GroveBin(sm); u += 1; end; end; end;
+  c = Dict{Integer,Array{Integer,1}}(); for k ∈ 1:length(G); ind = G[k][end].gbin
+    try; c[ind]; catch; push!(c,ind=>Array{Integer,1}(0)); end; push!(c[ind],k); end
+  GroveStore(n,G,c); return G; end
+(GroveStore,GroveComp,GroveSums) = (()->(GG=Array{Array{Array{GroveBin,1},1},1}(0); CC=Array{Dict{Integer,Array{Integer,1}},1}(0); return ((n::Int,g::Array{Array{GroveBin,1},1},c::Dict{Integer,Array{Integer,1}})->(n==length(GG)+1 && (push!(GG,deepcopy(g)); push!(CC,deepcopy(c)))), (n::Int)->(GroveCompos(n); (return deepcopy(CC[n]))), (n::Int)->(n<=length(GG) && n>0x00 ? (return deepcopy(GG[n])) : (return Array{Array{GroveBin,1},1}(0) )  ) )))()
+function GroveComposition(d::UI8I,ind::Integer)
+  show(GroveBin(Grove(d,ind))); gi = GroveComp(d); com = GroveCompos(d)
+  try; gi[ind]; catch; print(" has 1 composition (iteslf)\n"); return 1; end
+  lg = length(gi[ind]); print(" has $(lg+1) compositions\n")
+  for k ∈ 1:lg; print("("); show(com[gi[ind][k]][1])
+    for t ∈ 2:length(com[gi[ind][k]])-1; print(") + ("); show(com[gi[ind][k]][t]); end
+    print(")\n"); end; return lg+1; end
 
 # Involution
 

@@ -34,6 +34,6 @@ d = 5
 @test (Grove([1,2,3])⊣PBTree([1,3,1])) == (PBTree([1,2,3])⊣Grove([1,3,1])) == (Grove([1,2,3])⊣Grove([1,3,1])) == ((Grove([1,2,3]).Y)⊣(PBTree([1,3,1]).Y))
 @test (Grove([1,2,3])⊢PBTree([1,3,1])) == (PBTree([1,2,3])⊢Grove([1,3,1])) == (Grove([1,2,3])⊢Grove([1,3,1])) == ((Grove([1,2,3]).Y)⊢(PBTree([1,3,1]).Y))
 @test Grove(8,GroveIndex(Grove(5,1000)+Grove(3,7)))==Grove(5,1000)+Grove(3,7)
-@test GroveComposition(3) == GroveComposition(3)
+@test GroveComposition(3,GroveIndex(3)) == 4
 @test GrovePrint(Grove(3,7)) == GrovePrint(3) == GrovePrint(GroveAlg.TreeBase([1:d...]))
 @test GroveAlg.TreeBase(d,1) |> GrovePrint == GrovePrint([Grove(d,1)])
