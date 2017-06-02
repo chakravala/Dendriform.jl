@@ -67,7 +67,7 @@ function GroveCompos(n::Int,η::Int=n)
 (GroveStore,GroveComp,GroveSums) = (()->(GG=Array{Array{Array{GroveBin,1},1},1}(0); CC=Array{Dict{Integer,Array{Integer,1}},1}(0); return ((n::Int,g::Array{Array{GroveBin,1},1},c::Dict{Integer,Array{Integer,1}})->(n==length(GG)+1 && (push!(GG,deepcopy(g)); push!(CC,deepcopy(c)))), (n::Int)->(GroveCompos(n); (return deepcopy(CC[n]))), (n::Int)->(n<=length(GG) && n>0x00 ? (return deepcopy(GG[n])) : (return Array{Array{GroveBin,1},1}(0) )  ) )))()
 function GroveComposition(d::UI8I,ind::Integer)
   show(GroveBin(Grove(d,ind))); gi = GroveComp(d); com = GroveCompos(d)
-  try; gi[ind]; catch; print(" has 1 composition (iteslf)\n"); return 1; end
+  try; gi[ind]; catch; print(" has 1 composition (itself)\n"); return 1; end
   lg = length(gi[ind]); print(" has $(lg+1) compositions\n")
   for k ∈ 1:lg; print("("); show(com[gi[ind][k]][1])
     for t ∈ 2:length(com[gi[ind][k]])-1; print(") + ("); show(com[gi[ind][k]][t]); end
