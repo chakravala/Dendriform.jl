@@ -73,7 +73,6 @@ function TreeLoday(υ::BaseTree) # from TreeBase
 function TreeLoday(Y::Array{BaseTree,1})
   γ = length(Y); L = Grove(Array{UInt8,2}(γ,length(Y[1].μ[:])))
   for η ∈ 1:γ; L.Y[η,:] = (TreeLoday(Y[η])).Y; end; return L; end;
-#TreeLoday(deg::UI8I,ind::Int) = TreeLoday(deg,[ind]) # treeindex
 TreeLoday(deg::UI8I) = Υ(deg); # from degree
 TreeLoday(d::UI8I,s::Integer) = Grove(d,s)
 
@@ -92,9 +91,6 @@ function TreeBase(d::UI8I,γ::Int,g::Ar2UI8I); μ = Array{BaseTree,1}(γ)
   for η ∈ 1:γ; μ[η] = TreeBase(d,g[η,:]); end; return μ; end;
 TreeBase(g::Ar2UI8I) = TreeBase(GroveDeg(g),length(g[:,1]),g)
 TreeBase(g::Grove) = TreeBase(g.degr,g.size,g.Y)
-#function TreeBase(Y::Union{Array{Ar2UI8I,1},Array{Grove,1}})
-#  γ = length(Y); μ = Array{Array{BaseTree,1},1}(γ)
-#  for n ∈ 1:γ; μ[n] = TreeBase(Y[n]); end; return μ; end;
 TreeBase(deg::UI8I) = TreeBase(Υ(deg));
 
 # TreeBase -> Max Integer
@@ -126,7 +122,6 @@ function TreeRational(d::UI8I,indb::BitArray) # from treeindex
   y = ΥI(d); c = 1; ind = find(indb); g = Array{Int,1}(length(ind));
   for i ∈ ind; g[c] = y[i]; c +=1; end; return TreeRational(d,g); end
 TreeRational(μ::BaseTree) = (s=treeshift(); s+((-1)^s)*ΘInt(μ.μ)//ΘMax(length(μ.μ)))
-#TreeRational(deg::UI8I,Θ::Int) = (s=treeshift(); 1-s-((-1)^s)*Θ//ΘMax(deg))
 TreeRational(deg::UI8I,Θ::Array{Int,1}) = (s=treeshift(); 1-s-((-1)^s)*Θ.//ΘMax(deg))
 function TreeRational(Y::Array{BaseTree,1}); γ = length(Y); r = Array{Rational,1}(γ)
   for n ∈ 1:γ; r[n] = TreeRational(Y[n]); end; return r; end;

@@ -1,14 +1,14 @@
 # This file is part of GroveAlg.jl. It is licensed under the GPL license
 # GroveAlg Copyright (C) 2017 Michael Reed
 
-export ∪, ∨, graft, leftbranch, rightbranch, over, under, ↗, ↖, ⊣, ⊢, +, *, σ
+export ∪, ∨, graft, leftbranch, rightbranch, over, under, ↗, ↖, ⊣, ⊢, +, *
 
 # union
 
 function ∪(x::Grove,y::Vararg{Grove}); L = 1:length(y)
   out = Grove(|(grovebit(x),[grovebit(y[i]) for i ∈ L]...))
   s = x.size; for i ∈ L; s += y[i].size; end; s = s - out.size
-  s ≠ 0 && warn("$s duplicates in grove union"); return out; end
+  s ≠ 0 && info("$s duplicate$(s>1?'s':"") in grove union"); return out; end
 ∪(x::NotGrove,y::Vararg{Grove}) = ∪(convert(Grove,x),y...)
 ∪{T<:Union{NotGrove,Grove}}(x::Grove,y::Vararg{T}) = ∪(promote(x,y...)...)
 ∪{T<:NotGrove}(x::NotGrove,y::Vararg{T}) = ∪(promote(convert(Grove,x),y...)...)
@@ -109,7 +109,7 @@ function *(x::Grove,y::Grove)::Grove
 *(x::Union{Grove,PBTree},y::NotGrove) = x*convert(Grove,y)
 *(x::GroveBin,y::NotGrove) = Grove(x)*convert(Grove,y)
 *(x::Ar1UI8I,y::Union{Grove,PBTree}) = convert(PBTree,x)*y
-*(x::Union{AbstractPBTree},y::GroveBin) = convert(PBTree,x)*Grove(y)
+*(x::Union{Ar1UI8I},y::GroveBin) = convert(PBTree,x)*Grove(y)
 *(x::Union{Ar2UI8I,UI8I},y::Union{Grove,PBTree}) = convert(Grove,x)*y
 *(x::Union{Ar2UI8I,UI8I},y::GroveBin) = convert(Grove,x)*Grove(y)
 *(x::GroveBin,y::Grove) = Grove(x)*y

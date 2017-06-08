@@ -4,7 +4,7 @@ module GroveAlg
 # This file is part of GroveAlg.jl. It is licensed under the GPL license
 # GroveAlg Copyright (C) 2017 Michael Reed
 
-export PBTree, Grove, GroveBin, ==, grovesort, grovesort!, Cn, print, grovecomposition
+export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovecomposition
 
 # definitions
 
@@ -71,9 +71,8 @@ grovesort = (()->(gs=true; return (tf=gs)->(gs≠tf && (gs=tf; ΥGS()); return g
 
 function CnInv(n::UI8I); d = 1; k = Cn(d); while k < n; d +=1; k = Cn(d); end
   k == n ? (return d) : error("$n is not a Catalan number"); end
-σ(x::Grove) = Grove(x.Y[:,end:-1:1]); σ(x::NotGrove) = σ(Grove(x));
-#σ(x::PBTree) = PBTree(x.Y[end:-1:1]); function σ(Y::Array{Grove,1}); γ = length(Y);
-#  r = Array{Grove,1}(γ); for n∈1:γ; r[n] = σ(Y[n]); end; return r; end
+σ(x::Union{Grove,GroveBin}) = σ(Grove(x).Y); σ(x::Ar2UI8I) = Grove(x[:,end:-1:1])
+σ(x::PBTree) = σ(x.Y); σ(x::Ar1UI8I) = PBTree(x[end:-1:1])
 
 include("morphism.jl")
 include("arithmetic.jl")
@@ -164,7 +163,5 @@ function print(io::IO,Y::Array{BaseTree,1}) # given Index label grove
 print(io::IO,Y::Array{Grove,1}) = for n ∈ 1:length(Y); print(io,Y[n]); end
 function print(io::IO,k::GroveBin)
   print(io,"$(k.gbin) Y$(k.degr) \#$(k.size)/$(Cn(k.degr)) [$(k.ppos)\%]"); end
-#GrovePrint(Y::Array{Array{BaseTree,1},1}) = for n ∈ 1:length(Y); print(io,Y[n]); end
-#GrovePrint(io,deg::UI8I) = print(io,Υ(deg)); # given deg
 
 end
