@@ -1,6 +1,6 @@
-using GroveAlg
+using Dendriform
 using Base.Test
-import GroveAlg: GroveError, TreeInteger, TreeRational, TreeBase, TreeLoday
+import Dendriform: GroveError, TreeInteger, TreeRational, TreeBase, TreeLoday
 
 d = 5
 @test promote_rule(PBTree,Array{UInt8,1}) == PBTree && promote_rule(Grove,PBTree) == Grove
@@ -14,9 +14,10 @@ d = 5
 @test σ(σ(Grove(3,7))) == Grove(3,7)
 @test ((a,b)=([1:5...],Grove(5,5)); ∪(a,b) == ∪(b,a) == ∪(b.Y,a) == ∪(b.Y) == ∪(b))
 @test graft([1,2,3],[2,1]) == graft([1,2],[3,2,1]) |> σ
-@test GroveAlg.PrimitiveTree([1,2,3]) && GroveAlg.PrimitiveTree([3,2,1])
+@test under([1,2,3],[3,2,1]) == σ(over([1,2,3],[3,2,1]))
+@test Dendriform.PrimitiveTree([1,2,3]) && Dendriform.PrimitiveTree([3,2,1])
 @test leftbranch([1,4,2,1]) == rightbranch([1,2,4,1])
-@test GroveAlg.LeftInherited([1,2,3]) == GroveAlg.RightInherited([3,2,1])
+@test Dendriform.LeftInherited([1,2,3]) == Dendriform.RightInherited([3,2,1])
 @test [1,2,3] |> grovesort! == [1,2,3] |> Grove
 @test Grove(d) |> grovesort! == Grove(d) == Grove(d,2^Cn(d)-1)
 @test Grove(d) == d |> TreeBase |> TreeLoday
@@ -40,8 +41,9 @@ d = 5
   (Grove([1,2,3])⊣Grove([1,3,1])) == ((Grove([1,2,3]).Y)⊣(PBTree([1,3,1]).Y))
 @test (Grove([1,2,3])⊢PBTree([1,3,1])) == (PBTree([1,2,3])⊢Grove([1,3,1])) ==
   (Grove([1,2,3])⊢Grove([1,3,1])) == ((Grove([1,2,3]).Y)⊢(PBTree([1,3,1]).Y))
-@test (GroveBin(Grove(5))⊣Grove(5)) == (Grove(5)⊣GroveBin(Grove(5)))
-@test (GroveBin(Grove(5))⊢Grove(5)) == (Grove(5)⊢GroveBin(Grove(5)))
+@test (GroveBin(Grove(d))⊣Grove(d)) == (Grove(d)⊣GroveBin(Grove(d)))
+@test (GroveBin(Grove(d))⊢Grove(d)) == (Grove(d)⊢GroveBin(Grove(d)))
+@test leftsum(Grove(d-1),Grove(d-1)).degr == rightsum(Grove(d-1),Grove(d-1)).degr
 @test Grove(8,groveindex(Grove(5,1000)+Grove(3,7)))==Grove(5,1000)+Grove(3,7)
 @test (x = PBTree(1,1); GroveBin(x)*x == x*GroveBin(x) == [1]*GroveBin(x) == 1*x
   == 1*GroveBin(x) == GroveBin(x)*Grove(x))

@@ -1,7 +1,7 @@
-# This file is part of GroveAlg.jl. It is licensed under the GPL license
-# GroveAlg Copyright (C) 2017 Michael Reed
+# This file is part of Dendriform.jl. It is licensed under the GPL license
+# Dendriform Copyright (C) 2017 Michael Reed
 
-export ∪, ∨, graft, leftbranch, rightbranch, over, under, ↗, ↖, ⊣, ⊢, +, *
+export ∪, ∨, graft, leftbranch, rightbranch, over, under, ↗, ↖, leftsum, rightsum, ⊣, ⊢, +, *
 
 # union
 
@@ -34,10 +34,12 @@ rightbranch(t::Ar1UI8I) = rightbranch(convert(PBTree,t))
 
 # over / under
 
-↗(x::PBTree,y::PBTree) = over(x,y); function over(x::PBTree,y::PBTree)
+↗(x::AbstractPBTree,y::AbstractPBTree) = over(x,y); function over(x::PBTree,y::PBTree)
   vcat(x.Y,leftbranch(y).Y+x.degr) ∨ rightbranch(y); end
+over(x::AbstractPBTree,y::AbstractPBTree) = over(PBTree(x),PBTree(y))
 ↖(x::PBTree,y::PBTree) = under(x,y); function under(x::PBTree,y::PBTree)
   leftbranch(x) ∨ vcat(rightbranch(x).Y+y.degr,y.Y); end
+under(x::AbstractPBTree,y::AbstractPBTree) = under(PBTree(x),PBTree(y))
 
 # arithmetic (left)
 
@@ -58,6 +60,7 @@ function ⊣(x::Grove,y::Grove); x.degr == 0 && (return Grove(0))
 ⊣(x::NotGrove,y::Grove) = Grove(x) ⊣ y; ⊣(x::Grove,y::NotGrove) = x ⊣ Grove(y)
 ⊣(x::NotGrove,y::NotGrove) = Grove(x) ⊣ Grove(y)
 ⊣(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊣ PBTree(y)
+leftsum(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊣ y
 
 # arithmetic (right)
 
@@ -78,6 +81,7 @@ function ⊢(x::Grove,y::Grove); y.degr == 0 && (return Grove(0))
 ⊢(x::NotGrove,y::Grove) = Grove(x) ⊢ y; ⊢(x::Grove,y::NotGrove) = x ⊢ Grove(y)
 ⊢(x::NotGrove,y::NotGrove) = Grove(x) ⊢ Grove(y)
 ⊢(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊢ PBTree(y)
+rightsum(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊢ y
 
 # dendriform addition
 
@@ -96,16 +100,11 @@ function +(x::Grove,y::Grove)
 # dendriform multiplication
 
 function *(x::PBTree,y::Grove)::Grove
-  x.degr == 0 && (return Grove(0))
-  x.degr == 1 && (return y)
+  x.degr == 0 && (return Grove(0)); x.degr == 1 && (return y)
   return (leftbranch(x)*y ⊢ y) ⊣ rightbranch(x)*y; end
-function *(x::Grove,y::Grove)::Grove
-  x.degr == 0 && (return Grove(0))
-  x.degr == 1 && (return y)
-  out = Array{Grove,1}(x.size)
-  for j ∈ 1:x.size
-    out[j] = x.Y[j,:]*y; end
-  return ∪(out...); end;
+function *(x::Grove,y::Grove)::Grove; x.degr == 0 && (return Grove(0))
+  x.degr == 1 && (return y); out = Array{Array,1}(x.size)
+  for j ∈ 1:x.size; out[j] = (x.Y[j,:]*y).Y; end; return Grove(vcat(out...)); end
 *(x::Union{Grove,PBTree},y::NotGrove) = x*convert(Grove,y)
 *(x::GroveBin,y::NotGrove) = Grove(x)*convert(Grove,y)
 *(x::Ar1UI8I,y::Union{Grove,PBTree}) = convert(PBTree,x)*y

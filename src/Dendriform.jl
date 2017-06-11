@@ -1,8 +1,8 @@
 __precompile__()
-module GroveAlg
+module Dendriform
 
-# This file is part of GroveAlg.jl. It is licensed under the GPL license
-# GroveAlg Copyright (C) 2017 Michael Reed
+# This file is part of Dendriform.jl. It is licensed under the GPL license
+# Dendriform Copyright (C) 2017 Michael Reed
 
 export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovecomposition
 

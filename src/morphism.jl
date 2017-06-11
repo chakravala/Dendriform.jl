@@ -1,5 +1,5 @@
-# This file is part of GroveAlg.jl. It is licensed under the GPL license
-# GroveAlg Copyright (C) 2017 Michael Reed
+# This file is part of Dendriform.jl. It is licensed under the GPL license
+# Dendriform Copyright (C) 2017 Michael Reed
 
 export treecheck, grovecheck, treeindex, treeindexCn, groveindex, grovebit, treeshift
 
