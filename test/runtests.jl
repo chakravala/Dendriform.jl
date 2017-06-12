@@ -54,3 +54,7 @@ d = 5
 @test ((x,y)=(Grove(3,7),Grove(2,1)); σ(x+y)==σ(y)+σ(x) && σ(x*y)==σ(x)*σ(y))
 @test ((x,y)=(PBTree(3,4),PBTree(4,7)); σ(x∨y)==σ(y)∨σ(x)
   && σ(↗(x,y))==↖(σ(y),σ(x)) && σ(↖(x,y))==↗(σ(y),σ(x)))
+@test PBTree(d,1)<PBTree(d,d) && PBTree(d,d)>PBTree(d,1)
+@test PBTree(d,1)≤PBTree(d,d) && PBTree(d,d)≥PBTree(d,1)
+@test Grove(d,1)<Grove(d,d) && Grove(d,d)>Grove(d,1)
+@test Grove(d,1)≤Grove(d,d) && Grove(d,d)≥Grove(d,1)

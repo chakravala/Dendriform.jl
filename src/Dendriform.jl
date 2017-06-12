@@ -16,6 +16,7 @@ type BaseTree <: AbstractGrove; μ::Array{Array{UInt8,1},1}; end
 Ar1UI8I=Union{Array{UInt8,1},Array{Int,1}}; Ar2UI8I=Union{Array{UInt8,2},Array{Int,2}}
 AbstractPBTree = Union{PBTree,Ar1UI8I}; UI8I = Union{UInt8,Int}; Cn = catalannum
 NotGrove = Union{GroveBin,AbstractPBTree,Ar2UI8I,UI8I}
+PureGrove = Union{Grove,GroveBin,Ar2UI8I}
 
 # constructors
 

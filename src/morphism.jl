@@ -128,3 +128,14 @@ function TreeRational(Y::Array{BaseTree,1}); γ = length(Y); r = Array{Rational,
 TreeRational(deg::UI8I) = TreeRational(deg,TreeInteger(deg));
 TreeRational(υ::Any) = TreeRational(TreeBase(υ));
 treeshift = (()->(gs=true; return (tf=gs)->(gs≠tf && (gs=tf); return Int(gs))))()
+
+# Inequalities
+
+<(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) < treeindex(y)
+>(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) > treeindex(y)
+≤(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) ≤ treeindex(y)
+≥(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) ≥ treeindex(y)
+<(x::PureGrove,y::PureGrove) = groveindex(x) < groveindex(y)
+>(x::PureGrove,y::PureGrove) = groveindex(x) > groveindex(y)
+≤(x::PureGrove,y::PureGrove) = groveindex(x) ≤ groveindex(y)
+≥(x::PureGrove,y::PureGrove) = groveindex(x) ≥ groveindex(y)
