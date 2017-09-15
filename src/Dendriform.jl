@@ -40,6 +40,7 @@ Ar2UI8I=Union{Array{UInt8,2},Array{Int,2}}
 AbstractPBTree = Union{PBTree,Ar1UI8I}
 UI8I = Union{UInt8,Int}
 NotGrove = Union{GroveBin,AbstractPBTree,Ar2UI8I,UI8I}
+PureGrove = Union{Grove,GroveBin,Ar2UI8I}
 Cn = catalannum
 
 # constructors
