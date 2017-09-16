@@ -22,11 +22,13 @@ d = 5
 @test Grove(d) |> grovesort! == Grove(d) == Grove(d,2^Cn(d)-1)
 @test Grove(d) == d |> TreeBase |> TreeLoday
 @test (k = Grove(d) |> TreeBase |> TreeLoday; k == k |> TreeBase |> TreeLoday)
+@test TreeLoday(0,Array{Int,1}(0)) == Grove(0)
 @test [TreeBase([1:d...])] == TreeBase(d,1)
 @test Grove(d) |> TreeBase |> TreeInteger == Grove(d) |> TreeInteger
 @test (grovesort(false); TreeLoday(d,treeindex(Grove(d))) == Grove(d))
 @test (grovesort(false); Grove(d)) == (grovesort(true); Grove(d))
 @test Grove(d,groveindex(Grove(d).Y)) == TreeLoday(d)
+@test_throws DomainError groveindex(-1,-1,Grove([1,2,3]).Y)
 @test GroveBin([1,4,2,1]) |> Grove |> grovebit |> Grove |> grovecheck
 @test TreeLoday(d,grovebit(GroveBin(Grove(d)))) == Grove(d) |> GroveBin |> Grove
 @test Grove(d) |> groveindex == 2^Cn(d)-1 == Grove(d) |> grovebit |> groveindex
@@ -48,6 +50,7 @@ d = 5
 @test (x = PBTree(1,1); GroveBin(x)*x == x*GroveBin(x) == [1]*GroveBin(x) == 1*x
   == 1*GroveBin(x) == GroveBin(x)*Grove(x))
 @test grovecomposition(3,groveindex(3)) == 4
+@test grovecomposition(3,1) == 1
 @test println(Grove(3,7)) == print(TreeBase([1:d...]))
 @test TreeBase(d,1) |> print == println([Grove(d,1)])
 @test display(Grove(d,1)) == display(GroveBin(Grove(d,1))); print('\n')

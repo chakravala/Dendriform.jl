@@ -26,4 +26,4 @@ julia> Grove(3,7) ⊣ [1,2]∪[2,1]
 julia> Grove(2,3) * [1,2,3]∪[3,2,1] |> GroveBin
 2981131286847743360614880957207748817969 Y6 #30/132 [54.75%]
 ```
-Provides the types `PBTree` for planar binary trees, `Grove` for degree-invariant tree collections, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`, `∨` for `graft`, `leftbranch` and `rightbranch` for branching, `↗` and `↖` (i.e. `over` and `under`), and the `leftsum` and `rightsum` operators `⊣`, `⊢`, `+`, `*` for dendriform algebra.
+Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`, `∨` for `graft`, `leftbranch` and `rightbranch` for branching, `↗` and `↖` (i.e. `over` and `under`), and the `leftsum` and `rightsum` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
