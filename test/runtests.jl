@@ -16,7 +16,7 @@ d = 5
 @test graft([1,2,3],[2,1]) == graft([1,2],[3,2,1]) |> σ
 @test under([1,2,3],[3,2,1]) == σ(over([1,2,3],[3,2,1]))
 @test Dendriform.PrimitiveTree([1,2,3]) && Dendriform.PrimitiveTree([3,2,1])
-@test leftbranch([1,4,2,1]) == rightbranch([1,2,4,1])
+@test left([1,4,2,1]) == right([1,2,4,1])
 @test Dendriform.LeftInherited([1,2,3]) == Dendriform.RightInherited([3,2,1])
 @test [1,2,3] |> grovesort! == [1,2,3] |> Grove
 @test Grove(d) |> grovesort! == Grove(d) == Grove(d,2^Cn(d)-1)
@@ -45,7 +45,7 @@ d = 5
   (Grove([1,2,3])⊢Grove([1,3,1])) == ((Grove([1,2,3]).Y)⊢(PBTree([1,3,1]).Y))
 @test (GroveBin(Grove(d))⊣Grove(d)) == (Grove(d)⊣GroveBin(Grove(d)))
 @test (GroveBin(Grove(d))⊢Grove(d)) == (Grove(d)⊢GroveBin(Grove(d)))
-@test leftsum(Grove(d-1),Grove(d-1)).degr == rightsum(Grove(d-1),Grove(d-1)).degr
+@test dashv(Grove(d-1),Grove(d-1)).degr == vdash(Grove(d-1),Grove(d-1)).degr
 @test Grove(8,groveindex(Grove(5,1000)+Grove(3,7)))==Grove(5,1000)+Grove(3,7)
 @test (x = PBTree(1,1); GroveBin(x)*x == x*GroveBin(x) == [1]*GroveBin(x) == 1*x
   == 1*GroveBin(x) == GroveBin(x)*Grove(x))

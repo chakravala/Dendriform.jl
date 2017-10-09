@@ -5,9 +5,9 @@ export treecheck, grovecheck, treeindex, treeindexCn, groveindex, grovebit, tree
 
 # Tree Structure
 
-LeftInherited(t::PBTree) = rightbranch(t).degr == 0
+LeftInherited(t::PBTree) = right(t).degr == 0
 LeftInherited(t::Ar1UI8I) = LeftInherited(convert(PBTree,t))
-RightInherited(t::PBTree) = leftbranch(t).degr == 0
+RightInherited(t::PBTree) = left(t).degr == 0
 RightInherited(t::Ar1UI8I) = RightInherited(convert(PBTree,t))
 PrimitiveTree(t::PBTree) = LeftInherited(t) || RightInherited(t)
 PrimitiveTree(t::Ar1UI8I) = PrimitiveTree(convert(PBTree,t))

@@ -1,7 +1,7 @@
 # This file is part of Dendriform.jl. It is licensed under the GPL license
 # Dendriform Copyright (C) 2017 Michael Reed
 
-export ∪, ∨, graft, leftbranch, rightbranch, over, under, ↗, ↖, leftsum, rightsum, ⊣, ⊢, +, *
+export ∪, ∨, graft, left, right, over, under, ↗, ↖, dashv, vdash, ⊣, ⊢, +, *
 
 # union
 
@@ -41,29 +41,31 @@ graft(x::AbstractPBTree,y::AbstractPBTree) = x ∨ y
 
 # branching
 
-function leftbranch(t::PBTree)
+function left(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
     fx>1 && (return PBTree(fx-1,t.Y[1:fx-1]))
     return PBTree(0x00,Array{UInt8,1}(0))
 end
 
-leftbranch(t::Ar1UI8I) = leftbranch(convert(PBTree,t))
+left(t::Ar1UI8I) = left(convert(PBTree,t))
 
-function rightbranch(t::PBTree)
+function right(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
     fx<t.degr && (return PBTree(t.Y[fx+1:end]))
     return PBTree(0x00,Array{UInt8,1}(0))
 end
 
-rightbranch(t::Ar1UI8I) = rightbranch(convert(PBTree,t))
+right(t::Ar1UI8I) = right(convert(PBTree,t))
+
+path(x::PBTree) = left(left(x)) ∨ (right(left(x)) ∨ right(x))
 
 # over / under
 
 ↗(x::AbstractPBTree,y::AbstractPBTree) = over(x,y)
-over(x::PBTree,y::PBTree) = vcat(x.Y,leftbranch(y).Y+x.degr) ∨ rightbranch(y)
+over(x::PBTree,y::PBTree) = vcat(x.Y,left(y).Y+x.degr) ∨ right(y)
 over(x::AbstractPBTree,y::AbstractPBTree) = over(PBTree(x),PBTree(y))
 ↖(x::PBTree,y::PBTree) = under(x,y)
-under(x::PBTree,y::PBTree) = leftbranch(x) ∨ vcat(rightbranch(x).Y+y.degr,y.Y)
+under(x::PBTree,y::PBTree) = left(x) ∨ vcat(right(x).Y+y.degr,y.Y)
 under(x::AbstractPBTree,y::AbstractPBTree) = under(PBTree(x),PBTree(y))
 
 # arithmetic (left)
@@ -71,8 +73,8 @@ under(x::AbstractPBTree,y::AbstractPBTree) = under(PBTree(x),PBTree(y))
 function ⊣(x::PBTree,y::PBTree)
     x.degr == 0 && (return Grove(0))
     y.degr == 0 && (return Grove(x))
-    sm = rightbranch(x)+y
-    blx = leftbranch(x)
+    sm = right(x)+y
+    blx = left(x)
     isempty(sm.Y) && (return Grove(blx ∨ Array{UInt8,1}(0)))
     ls = sm.size
     addl = Grove(Array{UInt8,2}(ls,sm.degr + blx.degr + 1))
@@ -119,15 +121,15 @@ end
 ⊣(x::Grove,y::NotGrove) = x ⊣ Grove(y)
 ⊣(x::NotGrove,y::NotGrove) = Grove(x) ⊣ Grove(y)
 ⊣(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊣ PBTree(y)
-leftsum(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊣ y
+dashv(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊣ y
 
 # arithmetic (right)
 
 function ⊢(x::PBTree,y::PBTree)
     y.degr == 0 && (return Grove(0))
     x.degr == 0 && (return Grove(y))
-    sm = x+leftbranch(y)
-    bry = rightbranch(y)
+    sm = x+left(y)
+    bry = right(y)
     isempty(sm.Y) && (return Grove(Array{UInt8,1}(0) ∨ bry))
     ls = sm.size
     addr = Grove(Array{UInt8,2}(ls,sm.degr + bry.degr + 1))
@@ -174,7 +176,7 @@ end
 ⊢(x::Grove,y::NotGrove) = x ⊢ Grove(y)
 ⊢(x::NotGrove,y::NotGrove) = Grove(x) ⊢ Grove(y)
 ⊢(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊢ PBTree(y)
-rightsum(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊢ y
+vdash(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊢ y
 
 # dendriform addition
 
@@ -202,7 +204,7 @@ end
 function *(x::PBTree,y::Grove)::Grove
     x.degr == 0 && (return Grove(0))
     x.degr == 1 && (return y)
-    return (leftbranch(x)*y ⊢ y) ⊣ rightbranch(x)*y
+    return (left(x)*y ⊢ y) ⊣ right(x)*y
 end
 
 function *(x::Grove,y::Grove)::Grove

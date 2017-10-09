@@ -26,7 +26,7 @@ julia> Grove(3,7) ⊣ [1,2]∪[2,1]
 julia> Grove(2,3) * [1,2,3]∪[3,2,1] |> GroveBin
 2981131286847743360614880957207748817969 Y6 #30/132 [54.75%]
 ```
-Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`, `∨` for `graft`, `leftbranch` and `rightbranch` for branching, `↗` and `↖` (i.e. `over` and `under`), and the `leftsum` and `rightsum` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
+Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`, `∨` for `graft`, `left` and `right` for branching, `↗` and `↖` (i.e. `over` and `under`), and the `dashv` and `vdash` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
 
 We call ![tree-symb](https://latex.codecogs.com/svg.latex?\omega(\tau)&space;:=&space;[\omega(\tau^l),n,&space;\omega(\tau^r)]&space;=&space;[d_1,d_2,\dots,d_n]) the *name* of a tree to represent it as a vector, where the sequence is made up of *n* integers.
 Collections of planar binary trees are encoded into an equivalence class of matrices:

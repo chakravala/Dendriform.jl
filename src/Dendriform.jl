@@ -95,6 +95,7 @@ promote_rule{T<:Union{Ar1UI8I,Ar2UI8I,PBTree,UI8I}}(::Type{Grove},::Type{T})=Gro
 
 # display
 
+show(io::IO, ::MIME"text/plain", t::PBTree) = print(io,t)
 show(io::IO, ::MIME"text/plain", g::Grove) = print(io,g)
 show(io::IO, ::MIME"text/plain", k::GroveBin) = print(io,k)
 
@@ -217,7 +218,7 @@ end
 
 (Υ,ΥI,ΥGS) = ( () -> begin
         (Y,R)=GroveExtend()
-        return ((d::UI8I)->(return GroveExtend!(Y,R,UInt8(d))), (d::UI8I)->(GroveExtend!(Y,R,UInt8(d)); !grovesort() && GroveInteger!(Y,R,UInt8(d)); return d==0 ? Array{Int,1}(0) : R[d]), ()->((Y,R)=GroveExtend())) 
+        return ((d::UI8I)->(return GroveExtend!(Y,R,UInt8(d))), (d::UI8I)->(GroveExtend!(Y,R,UInt8(d)); !grovesort() && GroveInteger!(Y,R,UInt8(d)); return d==0 ? Array{Int,1}(0) : R[d]), ()->((Y,R)=GroveExtend()))
     end)()
   # provides hidden total grove reference
 
