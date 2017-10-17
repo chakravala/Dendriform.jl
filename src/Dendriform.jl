@@ -290,6 +290,8 @@ end
 
 # printing
 
+compatcharstr(char::Char) = (VERSION<v"0.6.9" ? string(char) : char) |> string
+
 function print(io::IO,υ::PBTree,μ::BaseTree)
     n=υ.degr
     ti=TreeInteger(μ)
@@ -327,8 +329,11 @@ function print(io::IO,Y::Array{Grove,1})
     end
 end
 
+ccss = compatcharstr('#')
+ccsc = compatcharstr('%')
+
 function print(io::IO,k::GroveBin)
-  print(io,"$(k.gbin) Y$(k.degr) \#$(k.size)/$(Cn(k.degr)) [$(k.ppos)\%]")
+  print(io,"$(k.gbin) Y$(k.degr) $ccss$(k.size)/$(Cn(k.degr)) [$(k.ppos)$ccsc]")
 end
 
 end
