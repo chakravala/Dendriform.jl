@@ -57,7 +57,35 @@ end
 
 right(t::Ar1UI8I) = right(convert(PBTree,t))
 
-path(x::PBTree) = left(left(x)) ∨ (right(left(x)) ∨ right(x))
+# partial ordering
+
+function posetbranch(t::PBTree)
+    h = Array{PBTree,1}()
+    l = left(t)
+    r = right(t)
+    x = left(l) ∨ (right(l) ∨ r)
+    x.degr == t.degr && push!(h,x)
+    if l.degr ≠ 0x00
+        hl = posetbranch(l)
+        for i ∈ 1:length(hl)
+            hl[i] = hl[i] ∨ r
+        end
+        push!(h,hl...)
+    end
+    if r.degr ≠ 0x00
+        hr = posetbranch(r)
+        for i ∈ 1:length(hr)
+            hr[i] = l ∨ hr[i]
+        end
+        push!(h,hr...)
+    end
+    return h
+end
+
+<(a::PBTree,b::PBTree) = b ∈ posetbranch(a)
+>(a::PBTree,b::PBTree) = a ∈ posetbranch(b)
+≤(a::PBTree,b::PBTree) = (a == b) || (a < b)
+≥(a::PBTree,b::PBTree) = (a == b) || (a > b)
 
 # over / under
 

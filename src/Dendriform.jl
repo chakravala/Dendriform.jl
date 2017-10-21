@@ -11,7 +11,7 @@ export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovec
 abstract type AbstractGrove end
 
 importall Base
-using Combinatorics
+using Combinatorics, Compat
 
 mutable struct PBTree <: AbstractGrove
     degr::UInt8
@@ -219,8 +219,7 @@ end
 (Υ,ΥI,ΥGS) = ( () -> begin
         (Y,R)=GroveExtend()
         return ((d::UI8I)->(return GroveExtend!(Y,R,UInt8(d))), (d::UI8I)->(GroveExtend!(Y,R,UInt8(d)); !grovesort() && GroveInteger!(Y,R,UInt8(d)); return d==0 ? Array{Int,1}(0) : R[d]), ()->((Y,R)=GroveExtend()))
-    end)()
-  # provides hidden total grove reference
+    end)() # provides hidden total grove reference
 
 # Grove Composition
 
@@ -290,8 +289,6 @@ end
 
 # printing
 
-compatcharstr(char::Char) = (VERSION<v"0.6.9" ? string(char) : char) |> string
-
 function print(io::IO,υ::PBTree,μ::BaseTree)
     n=υ.degr
     ti=TreeInteger(μ)
@@ -329,11 +326,8 @@ function print(io::IO,Y::Array{Grove,1})
     end
 end
 
-ccss = compatcharstr('#')
-ccsc = compatcharstr('%')
-
 function print(io::IO,k::GroveBin)
-  print(io,"$(k.gbin) Y$(k.degr) $ccss$(k.size)/$(Cn(k.degr)) [$(k.ppos)$ccsc]")
+  print(io,"$(k.gbin) Y$(k.degr) "*'#'*"$(k.size)/$(Cn(k.degr)) [$(k.ppos)"*'%'*"]")
 end
 
 end

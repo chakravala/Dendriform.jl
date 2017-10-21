@@ -53,11 +53,10 @@ d = 5
 @test grovecomposition(3,1) == 1
 @test println(Grove(3,7)) == print(TreeBase([1:d...]))
 @test TreeBase(d,1) |> print == println([Grove(d,1)])
-@test display(Grove(d,1)) == display(GroveBin(Grove(d,1))); print('\n')
+@test display(Grove(d,1)) == display(GroveBin(Grove(d,1))) == display(PBTree(d,1))
 @test ((x,y)=(Grove(3,7),Grove(2,1)); σ(x+y)==σ(y)+σ(x) && σ(x*y)==σ(x)*σ(y))
 @test ((x,y)=(PBTree(3,4),PBTree(4,7)); σ(x∨y)==σ(y)∨σ(x)
   && σ(↗(x,y))==↖(σ(y),σ(x)) && σ(↖(x,y))==↗(σ(y),σ(x)))
-@test PBTree(d,1)<PBTree(d,d) && PBTree(d,d)>PBTree(d,1)
-@test PBTree(d,1)≤PBTree(d,d) && PBTree(d,d)≥PBTree(d,1)
+@test PBTree([1,2,5,2,1]) ≤ PBTree([1,5,3,2,1]) && PBTree([3,2,1]) ≥ PBTree([1,3,1])
 @test Grove(d,1)<Grove(d,d) && Grove(d,d)>Grove(d,1)
 @test Grove(d,1)≤Grove(d,d) && Grove(d,d)≥Grove(d,1)

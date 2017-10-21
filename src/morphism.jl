@@ -273,10 +273,12 @@ treeshift = ( () -> begin
 
 # Inequalities
 
+#=
 <(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) < treeindex(y)
 >(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) > treeindex(y)
 ≤(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) ≤ treeindex(y)
 ≥(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) ≥ treeindex(y)
+=#
 <(x::PureGrove,y::PureGrove) = groveindex(x) < groveindex(y)
 >(x::PureGrove,y::PureGrove) = groveindex(x) > groveindex(y)
 ≤(x::PureGrove,y::PureGrove) = groveindex(x) ≤ groveindex(y)
