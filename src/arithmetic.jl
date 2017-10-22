@@ -59,33 +59,60 @@ right(t::Ar1UI8I) = right(convert(PBTree,t))
 
 # partial ordering
 
-function posetbranch(t::PBTree)
-    h = Array{PBTree,1}()
-    l = left(t)
-    r = right(t)
-    x = left(l) ∨ (right(l) ∨ r)
-    x.degr == t.degr && push!(h,x)
-    if l.degr ≠ 0x00
-        hl = posetbranch(l)
-        for i ∈ 1:length(hl)
-            hl[i] = hl[i] ∨ r
+function posetnext(t::PBTree)
+    g = Array{PBTree,1}()
+    λ = left(t)
+    ρ = right(t)
+    x = left(λ) ∨ (right(λ) ∨ ρ)
+    x.degr == t.degr && push!(g,x)
+    if λ.degr ≠ 0x00
+        gλ = posetnext(λ)
+        for i ∈ 1:length(gλ)
+            gλ[i] = gλ[i] ∨ ρ
         end
-        push!(h,hl...)
+        push!(g,gλ...)
     end
-    if r.degr ≠ 0x00
-        hr = posetbranch(r)
-        for i ∈ 1:length(hr)
-            hr[i] = l ∨ hr[i]
+    if ρ.degr ≠ 0x00
+        gρ= posetnext(ρ)
+        for i ∈ 1:length(gρ)
+            gρ[i] = λ ∨ gρ[i]
         end
-        push!(h,hr...)
+        push!(g,gρ...)
     end
-    return h
+    return g
 end
 
-<(a::PBTree,b::PBTree) = b ∈ posetbranch(a)
->(a::PBTree,b::PBTree) = a ∈ posetbranch(b)
+function posetprev(t::PBTree)
+    g = Array{PBTree,1}()
+    λ = left(t)
+    ρ = right(t)
+    x = (λ ∨ left(ρ)) ∨ right(ρ)
+    x.degr == t.degr && push!(g,x)
+    if λ.degr ≠ 0x00
+        gλ = posetprev(λ)
+        for i ∈ 1:length(gλ)
+            gλ[i] = gλ[i] ∨ ρ
+        end
+        push!(g,gλ...)
+    end
+    if ρ.degr ≠ 0x00
+        gρ = posetprev(ρ)
+        for i ∈ 1:length(gρ)
+            gρ[i] = λ ∨ gρ[i]
+        end
+        push!(g,gρ...)
+    end
+    return g
+end
+
+<(a::PBTree,b::PBTree) = b ∈ posetnext(a)
+>(a::PBTree,b::PBTree) = b ∈ posetprev(a)
 ≤(a::PBTree,b::PBTree) = (a == b) || (a < b)
 ≥(a::PBTree,b::PBTree) = (a == b) || (a > b)
+<(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) < PBTree(b)
+>(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) > PBTree(b)
+≤(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) ≤ PBTree(b)
+≥(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) ≥ PBTree(b)
 
 # over / under
 
@@ -223,9 +250,9 @@ function +(x::Grove,y::Grove)
     return Grove(vcat(ij...))
 end
 
-+(x::Grove,y::NotGrove) = x + convert(Grove,y)
-+(x::NotGrove,y::Grove) = convert(Grove,x) + y
-+(x::Union{GroveBin,PBTree},y::Union{GroveBin,PBTree}) = Grove(x) + Grove(y);
++(x::Union{Grove,GroveBin,PBTree},y::NotGrove) = x + convert(Grove,y)
++(x::NotGrove,y::Union{Grove,GroveBin,PBTree}) = convert(Grove,x) + y
++(x::Union{GroveBin,PBTree},y::Union{GroveBin,PBTree}) = Grove(x) + Grove(y)
 
 # dendriform multiplication
 

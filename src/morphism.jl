@@ -273,13 +273,31 @@ treeshift = ( () -> begin
 
 # Inequalities
 
-#=
-<(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) < treeindex(y)
->(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) > treeindex(y)
-≤(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) ≤ treeindex(y)
-≥(x::AbstractPBTree,y::AbstractPBTree) = treeindex(x) ≥ treeindex(y)
-=#
 <(x::PureGrove,y::PureGrove) = groveindex(x) < groveindex(y)
 >(x::PureGrove,y::PureGrove) = groveindex(x) > groveindex(y)
 ≤(x::PureGrove,y::PureGrove) = groveindex(x) ≤ groveindex(y)
 ≥(x::PureGrove,y::PureGrove) = groveindex(x) ≥ groveindex(y)
+
+#= Tree Iterator
+
+using ResumableFunctions
+
+@resumable function trees(g::Union{Grove,PBTree})
+    typeof(g) == PBTree && return ResumableFunctions.@yield g
+    for i ∈ 1:g.size-1
+        ResumableFunctions.@yield PBTree(g.Y[i,:])
+    end
+    return PBTree(g.Y[end,:])
+end
+
+convert(::Type{Array{PBTree,1}},g::Grove) = [trees(g)...] =#
+
+function convert(::Type{Grove},g::Array{PBTree,1})
+    λ = Array{UInt8,2}(length(g),g[1].degr)
+    for i ∈ 1:length(g)
+        λ[i,:] = g[i].Y
+    end
+    return Grove(λ)
+end
+
+Grove(g::Array{PBTree,1}) = convert(Grove,g)
