@@ -117,7 +117,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Dendriform Operators",
     "category": "section",
-    "text": "Dendriform.∪"
+    "text": "Base.∪"
 },
 
 {
@@ -181,7 +181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Partial Ordering",
     "category": "section",
-    "text": "Dendriform.posetnextDendriform.posetprevDendriform.<Dendriform.>Dendriform.≤Dendriform.≥"
+    "text": "Dendriform.posetnextDendriform.posetprevBase.<Base.>Base.≤Base.≥"
 },
 
 {
@@ -253,7 +253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Dialgebra Arithmetic",
     "category": "section",
-    "text": "overunder↗↖dashvvdash⊣⊢Dendriform.+Dendriform.*"
+    "text": "overunder↗↖dashvvdash⊣⊢Base.+Base.*"
 },
 
 {
