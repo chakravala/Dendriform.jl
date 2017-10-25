@@ -63,3 +63,4 @@ d = 5
 @test Grove(d,1)<Grove(d,d) && Grove(d,d)>Grove(d,1)
 @test Grove(d,1)≤Grove(d,d) && Grove(d,d)≥Grove(d,1)
 @test Grove(Dendriform.posetnext(PBTree([1,2,3]))) == Grove(3,6)
+@test print(DevNull,PBTree(0,1)) == nothing

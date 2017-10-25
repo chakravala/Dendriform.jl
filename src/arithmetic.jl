@@ -5,6 +5,11 @@ export ∪, ∨, graft, left, right, over, under, ↗, ↖, dashv, vdash, ⊣, �
 
 # union
 
+"""
+    ∪(g...)
+
+Returns union of AbstractGrove objects
+"""
 function ∪(x::Grove,y::Vararg{Grove})
     L = 1:length(y)
     out = Grove(.|(grovebit(x),[grovebit(y[i]) for i ∈ L]...))
@@ -24,6 +29,11 @@ end
 
 # grafting
 
+"""
+    ∨(left::AbstractPBTree, right::AbstractPBTree)
+
+Grafts the left and right AbstractPBTree objects
+"""
 function ∨(L::PBTree,R::PBTree) # graft()
     Ld = L.degr
     Rd = R.degr
@@ -37,10 +47,21 @@ end
 
 ∨(L::Ar1UI8I,R::PBTree) = PBTree(L) ∨ R; ∨(L::PBTree,R::Ar1UI8I) = L ∨ PBTree(R)
 ∨(L::Ar1UI8I,R::Ar1UI8I) = PBTree(L) ∨ PBTree(R)
+
+"""
+    graft(left::AbstractPBTree, right::AbstractPBTree)
+
+Grafts the left and right PBTree with root vertex
+"""
 graft(x::AbstractPBTree,y::AbstractPBTree) = x ∨ y
 
 # branching
 
+"""
+    left(::AbstractPBTree)
+
+Returns the left branch of an AbstractPBTree
+"""
 function left(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
     fx>1 && (return PBTree(fx-1,t.Y[1:fx-1]))
@@ -49,6 +70,11 @@ end
 
 left(t::Ar1UI8I) = left(convert(PBTree,t))
 
+"""
+    right(::AbstractPBTree)
+
+Returns the right branch of an AbstractPBTree
+"""
 function right(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
     fx<t.degr && (return PBTree(t.Y[fx+1:end]))
@@ -59,6 +85,11 @@ right(t::Ar1UI8I) = right(convert(PBTree,t))
 
 # partial ordering
 
+"""
+    Dendriform.posetnex(::PBTree)
+
+Returns an Array{PBTree,1} of trees that are greater than it
+"""
 function posetnext(t::PBTree)
     g = Array{PBTree,1}()
     λ = left(t)
@@ -82,6 +113,11 @@ function posetnext(t::PBTree)
     return g
 end
 
+"""
+    Dendriform.posetprev(::PBTree)
+
+Returns an Array{PBTree,1} of trees that are less than it
+"""
 function posetprev(t::PBTree)
     g = Array{PBTree,1}()
     λ = left(t)
@@ -105,26 +141,77 @@ function posetprev(t::PBTree)
     return g
 end
 
+"""
+    <(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns Bool that tells if a < b in Tamari partial order
+"""
 <(a::PBTree,b::PBTree) = b ∈ posetnext(a)
->(a::PBTree,b::PBTree) = b ∈ posetprev(a)
-≤(a::PBTree,b::PBTree) = (a == b) || (a < b)
-≥(a::PBTree,b::PBTree) = (a == b) || (a > b)
 <(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) < PBTree(b)
+
+"""
+    >(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns Bool that tells if a > b in Tamari partial order
+"""
+>(a::PBTree,b::PBTree) = b ∈ posetprev(a)
 >(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) > PBTree(b)
+
+"""
+    ≤(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns Bool that tells if a ≤ b in Tamari partial order
+"""
+≤(a::PBTree,b::PBTree) = (a == b) || (a < b)
 ≤(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) ≤ PBTree(b)
+
+"""
+    ≥(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns Bool that tells if a ≥ b in Tamari partial order
+"""
+≥(a::PBTree,b::PBTree) = (a == b) || (a > b)
 ≥(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) ≥ PBTree(b)
 
 # over / under
 
+"""
+    ↗(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns PBTRee obtained from a over b operation
+"""
 ↗(x::AbstractPBTree,y::AbstractPBTree) = over(x,y)
+
+"""
+    over(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns PBTRee obtained from a over b operation
+"""
 over(x::PBTree,y::PBTree) = vcat(x.Y,left(y).Y+x.degr) ∨ right(y)
 over(x::AbstractPBTree,y::AbstractPBTree) = over(PBTree(x),PBTree(y))
+
+"""
+    ↖(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns PBTRee obtained from a under b operation
+"""
 ↖(x::PBTree,y::PBTree) = under(x,y)
+
+"""
+    under(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns PBTRee obtained from a under b operation
+"""
 under(x::PBTree,y::PBTree) = left(x) ∨ vcat(right(x).Y+y.degr,y.Y)
 under(x::AbstractPBTree,y::AbstractPBTree) = under(PBTree(x),PBTree(y))
 
 # arithmetic (left)
 
+"""
+    ⊣(a::AbstractGrove, b::AbstractGrove)
+
+Returns Grove obtained from a ⊣ b operation
+"""
 function ⊣(x::PBTree,y::PBTree)
     x.degr == 0 && (return Grove(0))
     y.degr == 0 && (return Grove(x))
@@ -176,10 +263,21 @@ end
 ⊣(x::Grove,y::NotGrove) = x ⊣ Grove(y)
 ⊣(x::NotGrove,y::NotGrove) = Grove(x) ⊣ Grove(y)
 ⊣(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊣ PBTree(y)
+
+"""
+    dashv(a::AbstractGrove, b::AbstractGrove)
+
+Returns Grove obtained from a ⊣ b operation
+"""
 dashv(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊣ y
 
 # arithmetic (right)
 
+"""
+    ⊢(a::AbstractGrove, b::AbstractGrove)
+
+Returns Grove obtained from a ⊢ b operation
+"""
 function ⊢(x::PBTree,y::PBTree)
     y.degr == 0 && (return Grove(0))
     x.degr == 0 && (return Grove(y))
@@ -231,10 +329,21 @@ end
 ⊢(x::Grove,y::NotGrove) = x ⊢ Grove(y)
 ⊢(x::NotGrove,y::NotGrove) = Grove(x) ⊢ Grove(y)
 ⊢(x::Ar1UI8I,y::Ar1UI8I) = PBTree(x) ⊢ PBTree(y)
+
+"""
+    vdash(a::AbstractGrove, b::AbstractGrove)
+
+Returns Grove obtained from a ⊢ b operation
+"""
 vdash(x::Union{Grove,NotGrove},y::Union{Grove,NotGrove}) = x ⊢ y
 
 # dendriform addition
 
+"""
+    +(a::AbstractGrove, b::AbstractGrove)
+
+Returns Grove obtained from a + b operation
+"""
 function +(x::Grove,y::Grove)
     isempty(x.Y) && (return y)
     isempty(y.Y) && (return x)
@@ -256,6 +365,11 @@ end
 
 # dendriform multiplication
 
+"""
+    *(a::AbstractGrove, b::AbstractGrove)
+
+Returns Grove obtained from a × b operation
+"""
 function *(x::PBTree,y::Grove)::Grove
     x.degr == 0 && (return Grove(0))
     x.degr == 1 && (return y)

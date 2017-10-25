@@ -1,13 +1,10 @@
-<p align="center">
-  <img src="./docs/src/assets/logo.png" alt="Dendriform.jl"/>
-</p>
+# [Dendriform.jl](https://github.com/chakravala/Dendriform.jl)
 
-# Dendriform.jl
-*Dendriform dialgebra algorithms to compute using Loday's arithmetic on groves of planar binary trees*
+*Symbolic parser generator for Julia language expressions using REDUCE algebra term rewrite system*
 
-[![Build Status](https://travis-ci.org/chakravala/Dendriform.jl.svg?branch=master)](https://travis-ci.org/chakravala/Dendriform.jl) [![Build status](https://ci.appveyor.com/api/projects/status/j7t3oc1doeot6i72?svg=true)](https://ci.appveyor.com/project/chakravala/grovealg-jl) [![Coverage Status](https://coveralls.io/repos/github/chakravala/Dendriform.jl/badge.svg?branch=master)](https://coveralls.io/github/chakravala/Dendriform.jl?branch=master) [![codecov.io](http://codecov.io/github/chakravala/Dendriform.jl/coverage.svg?branch=master)](http://codecov.io/github/chakravala/Dendriform.jl?branch=master)
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://chakravala.github.io/Dendriform.jl/stable)
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://chakravala.github.io/Dendriform.jl/latest)
+
+```@contents
+```
 
 ## Setup
 Installation of latest release version using Julia:
@@ -15,8 +12,6 @@ Installation of latest release version using Julia:
 julia> Pkg.add("Dendriform")
 ```
 Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`; `∨` for `graft`; `left` and `right` for branching; `<`, `>`, `≤`, `≥` for Tamari's partial ordering; `↗` and `↖` (i.e. `over` and `under`); and the `dashv` and `vdash` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
-
-View the documentation [stable](https://chakravala.github.io/Dendriform.jl/stable) / [latest](https://chakravala.github.io/Dendriform.jl/latest) for more features and examples.
 
 ## Background
 We call ![tree-symb](https://latex.codecogs.com/svg.latex?\omega(\tau)&space;:=&space;[\omega(\tau^l),n,&space;\omega(\tau^r)]&space;=&space;[d_1,d_2,\dots,d_n]) the *name* of a tree to represent it as a vector, where the sequence is made up of *n* integers.

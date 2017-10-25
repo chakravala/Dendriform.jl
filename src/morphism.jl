@@ -5,29 +5,68 @@ export treecheck, grovecheck, treeindex, treeindexCn, groveindex, grovebit, tree
 
 # Tree Structure
 
+"""
+    Dendriform.LeftInherited(::AbstractPBTree)
+
+Returns Bool that tells if PBTree is left inherited
+"""
 LeftInherited(t::PBTree) = right(t).degr == 0
 LeftInherited(t::Ar1UI8I) = LeftInherited(convert(PBTree,t))
+
+"""
+    Dendriform.RightInherited(::AbstractPBTree)
+
+Returns Bool that tells if PBTree is right inherited
+"""
 RightInherited(t::PBTree) = left(t).degr == 0
 RightInherited(t::Ar1UI8I) = RightInherited(convert(PBTree,t))
+
+"""
+    Dendriform.PrimitiveTree(::AbstractPBTree)
+
+Returns Bool that tells if PBTree is primitive
+"""
 PrimitiveTree(t::PBTree) = LeftInherited(t) || RightInherited(t)
 PrimitiveTree(t::Ar1UI8I) = PrimitiveTree(convert(PBTree,t))
 
 # Grove Error
 
+"""
+    treecheck(::AbstractPBTree)
+
+Returns Bool that tells if PBTree is valid
+"""
 treecheck(d::UI8I,t::Int) = t > 0 && t <= Cn(d)
 treecheck(t::PBTree) = treecheck(t.degr,treeindex(t))
 treecheck(t::Ar1UI8I) = treecheck(convert(PBTree,t))
 treecheck(g::Grove) = findfirst(x->(x==0),treeindex(g)) == 0
 treecheck(g::NotGrove) = treecheck(convert(Grove,g))
+
+"""
+    grovecheck(::AbstractGrove)
+
+Returns Bool that tells if Grove is valid
+"""
 grovecheck(d::UI8I,gi::Integer) = gi >= 0 && gi < 2^Cn(d)
 grovecheck(g::Grove) = grovecheck(g.degr,groveindex(g))
 grovecheck(g::NotGrove) = grovecheck(convert(Grove,g))
+
+"""
+    Dendriform.GroveError(::AbstractGrove)
+
+Returns Array with Grove sorting index error
+"""
 GroveError(n::UI8I) = treeindex(n)-sortperm(TreeInteger(n))
 GroveError(g::Grove) = [1:g.size...]-sortperm(TreeInteger(g))
 GroveError(g::NotGrove) = convert(Grove,g) |> GroveError
 
 # treeindex
 
+"""
+    treeindex(::AbstractGrove)
+
+Returns tree indices of any PBTree or Grove
+"""
 function treeindex(d::UI8I,l::Int,g::Ar2UI8I)
     v=ΥI(d)
     ind=Array{Int,1}(l)
@@ -48,6 +87,11 @@ treeindexCn(deg::UI8I) = treeindex(deg).//Int(Cn(deg))
 
 # grovebit
 
+"""
+    grovebit(::AbstractGrove)
+
+Returns a BitArray of tree indices
+"""
 function grovebit(d::UI8I,l::Int,g::Ar2UI8I)
     v=ΥI(d)
     s=falses(length(v))
@@ -69,6 +113,11 @@ end
 
 # groveindex
 
+"""
+    groveindex(::AbstractGrove)
+
+Returns the grove index of any Grove
+"""
 function groveindex(d::UI8I,l::Int,g::Ar2UI8I)
     s=BigInt(0)
     try
@@ -138,6 +187,11 @@ TreeLoday(d::UI8I,s::Integer) = Grove(d,s)
 
 # TreeBase
 
+"""
+    Dendriform.TreeBase(::AbstractGrove)
+
+Returns BaseTree objects for any AbstractGrove
+"""
 TreeBase(d::UI8I,s::Integer) = TreeBase(d,grovebit(find(s)))
 
 function TreeBase(d::UI8I,ind::BitArray) # from treeindex
@@ -207,6 +261,11 @@ end
 
 # TreeInteger
 
+"""
+    Dendriform.TreeInteger(::AbstractGrove)
+
+Returns the tree integers of any AbstractGrove
+"""
 TreeInteger(d::UI8I,s::Integer) = TreeInteger(d,grovebit(d,s))
 TreeInteger(d::UI8I,s::BitArray) = TreeInteger(d,find(s))
 
@@ -237,6 +296,11 @@ TreeInteger(deg::UI8I) = ΥI(deg);
 
 # TreeRational
 
+"""
+    Dendriform.TreeRational(::AbstractGrove)
+
+Returns the tree rationals of any AbstractGrove
+"""
 TreeRational(d::UI8I,s::Integer) = TreeRational(d,grovebit(d,s))
 
 function TreeRational(d::UI8I,indb::BitArray) # from treeindex
@@ -266,6 +330,11 @@ end
 TreeRational(deg::UI8I) = TreeRational(deg,TreeInteger(deg))
 TreeRational(υ::Any) = TreeRational(TreeBase(υ))
 
+"""
+    treeshift(::Bool)
+
+Toggles the shift for the tree integers / rationals
+"""
 treeshift = ( () -> begin
         gs=true
         return (tf=gs)->(gs≠tf && (gs=tf); return Int(gs))
