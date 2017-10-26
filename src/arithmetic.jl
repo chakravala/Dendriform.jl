@@ -86,7 +86,7 @@ right(t::Ar1UI8I) = right(convert(PBTree,t))
 # partial ordering
 
 """
-    Dendriform.posetnex(::PBTree)
+    Dendriform.posetnext(::PBTree)
 
 Returns an Array{PBTree,1} of trees that are greater than it
 """
@@ -187,7 +187,7 @@ Returns PBTRee obtained from a over b operation
 
 Returns PBTRee obtained from a over b operation
 """
-over(x::PBTree,y::PBTree) = vcat(x.Y,left(y).Y+x.degr) ∨ right(y)
+over(x::PBTree,y::PBTree) = y.degr > 1 ? over(x,left(y)) ∨ right(y) : x ∨ PBTree(0,1)
 over(x::AbstractPBTree,y::AbstractPBTree) = over(PBTree(x),PBTree(y))
 
 """
@@ -202,7 +202,7 @@ Returns PBTRee obtained from a under b operation
 
 Returns PBTRee obtained from a under b operation
 """
-under(x::PBTree,y::PBTree) = left(x) ∨ vcat(right(x).Y+y.degr,y.Y)
+under(x::PBTree,y::PBTree) = x.degr > 1 ? left(x) ∨ under(right(x),y) : PBTree(0,1) ∨ y
 under(x::AbstractPBTree,y::AbstractPBTree) = under(PBTree(x),PBTree(y))
 
 # arithmetic (left)
