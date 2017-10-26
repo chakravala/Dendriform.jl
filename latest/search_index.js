@@ -29,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Background",
     "category": "section",
-    "text": "We call (Image: tree-symb) the name of a tree to represent it as a vector, where the sequence is made up of n integers. Collections of planar binary trees are encoded into an equivalence class of matrices:(Image: matrix-equivalence-class)where (Image: A~B) if there exists a permutation (Image: f  in Sk) so that (Image: condition). The binary tree grafting operation is computed<p align=\"center\"><img src=\"https://latex.codecogs.com/svg.latex?\\omega(\\alpha\\vee&space;\\beta)&space;=&space;\\omega(\\alpha)\\vee\\omega(\\beta)&space;:=&space;[\\omega(\\alpha),a&plus;1&plus;b,\\omega(\\beta)]\\in&space;\\Lambda_{a&plus;b&plus;1}^1\"/></p>The left and right addition are computed on the following recursive principle:<p align=\"center\"><img src=\"https://latex.codecogs.com/svg.latex?\\xi\\dashv&space;\\eta&space;&=&space;\\bigcup_{i}&space;\\bigcup_{\\tau&space;\\in&space;\\xi_i^r&space;&plus;&space;\\eta}&space;\\xi_i^l&space;\\vee&space;\\tau&space;\\qquad&space;&\\text{and}&space;\\qquad&space;\\qquad&space;\\xi\\vdash&space;\\eta&space;&=&space;\\bigcup_{j}&space;\\bigcup_{\\tau&space;\\in&space;\\xi&plus;\\eta_j^l}&space;\\tau\\vee&space;\\eta_j^r.\"/></p>Together these non-commutative binary operations satisfy the properties of an associative dendriform dialgebra. The structures induced by Loday's definition of the sum have the partial ordering of the associahedron known as Tamari lattice.<p align=\"center\">   <img src=\"https://raw.githubusercontent.com/wiki/chakravala/Fatou.jl/dendriform/grove-sum-1.png\" alt=\"tamari-grove-commutativity.png\"/> </p>Figure: Tamari associahedron, colored to visualize noncommutative sums of [1,2] and [2,1], code: gistHowever, in this computational package, a stricter total ordering is constructed using a function that transforms the set-vector isomorphism obtained from the descending greatest integer index position search method:<p align=\"center\"><img src=\"https://latex.codecogs.com/svg.latex?\\Theta(\\mu)&space;&=&space;\\sum_{j=n}^1&space;\\sum_{k=1}^{\\&hash;e_j}&space;(e_j)_k&space;\\cdot&space;10^{\\delta(j,k)},&space;\\qquad&space;&\\text{where}&space;\\qquad&space;\\delta(j,k)&space;&=&space;n&space;-&space;\\sum_{r=1}^{j-1}&space;\\sum_{s=1}^{\\&hash;e_r}&space;1&space;-&space;\\sum_{s=1}^{k}&space;1\"/></p>The structure obtained from this total ordering is used to construct a reliable binary groveindex representation that encodes the essential data of any grove, using the formula<p align=\"center\"><img src=\"https://latex.codecogs.com/svg.latex?\\zeta_\\gamma&space;:=&space;\\sum_{\\tau&space;\\in&space;\\gamma}&space;2^{\\theta_\\tau&space;-&space;1}\"/></p>These algorithms are used in order to facilitate computations that provide insight into the Loday arithmetic."
+    "text": "Check the README for more background information."
 },
 
 {
@@ -165,7 +165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Dendriform.posetnext",
     "category": "Function",
-    "text": "Dendriform.posetnex(::PBTree)\n\nReturns an Array{PBTree,1} of trees that are greater than it\n\n\n\n"
+    "text": "Dendriform.posetnext(::PBTree)\n\nReturns an Array{PBTree,1} of trees that are greater than it\n\n\n\n"
 },
 
 {
