@@ -1,7 +1,7 @@
 # This file is part of Dendriform.jl. It is licensed under the GPL license
 # Dendriform Copyright (C) 2017 Michael Reed
 
-export ∪, ∨, graft, left, right, over, under, ↗, ↖, dashv, vdash, ⊣, ⊢, +, *
+export ∪, ∨, graft, left, right, over, under, ↗, ↖, dashv, vdash, ⊣, ⊢, +, *, ⋖, ⋗, posetnext, posetprev, between
 
 # union
 
@@ -85,26 +85,21 @@ right(t::Ar1UI8I) = right(convert(PBTree,t))
 
 # partial ordering
 
-"""
-    Dendriform.posetnext(::PBTree)
-
-Returns an Array{PBTree,1} of trees that are greater than it
-"""
-function posetnext(t::PBTree)
+function posetnext_list(t::PBTree)
     g = Array{PBTree,1}()
     λ = left(t)
     ρ = right(t)
     x = left(λ) ∨ (right(λ) ∨ ρ)
     x.degr == t.degr && push!(g,x)
     if λ.degr ≠ 0x00
-        gλ = posetnext(λ)
+        gλ = posetnext_list(λ)
         for i ∈ 1:length(gλ)
             gλ[i] = gλ[i] ∨ ρ
         end
         push!(g,gλ...)
     end
     if ρ.degr ≠ 0x00
-        gρ= posetnext(ρ)
+        gρ= posetnext_list(ρ)
         for i ∈ 1:length(gρ)
             gρ[i] = λ ∨ gρ[i]
         end
@@ -114,25 +109,28 @@ function posetnext(t::PBTree)
 end
 
 """
-    Dendriform.posetprev(::PBTree)
+    posetnext(::AbstractPBTree)
 
-Returns an Array{PBTree,1} of trees that are less than it
+Returns a Grove that covers the given tree
 """
-function posetprev(t::PBTree)
+posetnext(t::PBTree) = t |> posetnext_list |> Grove
+posetnext(t::AbstractPBTree) = t |> PBTree |> posetnext
+
+function posetprev_list(t::PBTree)
     g = Array{PBTree,1}()
     λ = left(t)
     ρ = right(t)
     x = (λ ∨ left(ρ)) ∨ right(ρ)
     x.degr == t.degr && push!(g,x)
     if λ.degr ≠ 0x00
-        gλ = posetprev(λ)
+        gλ = posetprev_list(λ)
         for i ∈ 1:length(gλ)
             gλ[i] = gλ[i] ∨ ρ
         end
         push!(g,gλ...)
     end
     if ρ.degr ≠ 0x00
-        gρ = posetprev(ρ)
+        gρ = posetprev_list(ρ)
         for i ∈ 1:length(gρ)
             gρ[i] = λ ∨ gρ[i]
         end
@@ -142,11 +140,45 @@ function posetprev(t::PBTree)
 end
 
 """
+    posetprev(::PBTree)
+
+Returns a Grove that covers the given tree
+"""
+posetprev(t::PBTree) = t |> posetprev_list |> Grove
+posetprev(t::AbstractPBTree) = t |> PBTree |> posetprev
+
+"""
+    ⋖(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns Bool that tells if b covers a in Tamari partial order
+"""
+⋖(a::PBTree,b::PBTree) = b ∈ posetnext_list(a)
+⋖(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) ⋖ PBTree(b)
+
+"""
+    ⋗(a::AbstractPBTree, b::AbstractPBTree)
+
+Returns Bool that tells if a covers b in Tamari partial order
+"""
+⋗(a::PBTree,b::PBTree) = b ∈ posetprev_list(a)
+⋗(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) ⋗ PBTree(b)
+
+"""
     <(a::AbstractPBTree, b::AbstractPBTree)
 
 Returns Bool that tells if a < b in Tamari partial order
 """
-<(a::PBTree,b::PBTree) = b ∈ posetnext(a)
+function <(a::PBTree,b::PBTree)
+    h = posetnext_list(a)
+    b ∈ h && return true
+    less = false
+    i = 0
+    while !less & (i < length(h))
+        i += 1
+        less = h[i] < b
+    end
+    return less
+end
 <(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) < PBTree(b)
 
 """
@@ -154,7 +186,18 @@ Returns Bool that tells if a < b in Tamari partial order
 
 Returns Bool that tells if a > b in Tamari partial order
 """
->(a::PBTree,b::PBTree) = b ∈ posetprev(a)
+function >(a::PBTree,b::PBTree)
+    h = posetprev_list(a)
+    b ∈ h && return true
+    gtr = false
+    i = 0
+    while !gtr & (i < length(h))
+        i += 1
+        gtr = h[i] > b
+    end
+    return gtr
+end
+
 >(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) > PBTree(b)
 
 """
@@ -173,7 +216,29 @@ Returns Bool that tells if a ≥ b in Tamari partial order
 ≥(a::PBTree,b::PBTree) = (a == b) || (a > b)
 ≥(a::AbstractPBTree,b::AbstractPBTree) = PBTree(a) ≥ PBTree(b)
 
-# over / under
+function between_list(a::PBTree,b::PBTree)
+    g = Array{PBTree,1}()
+    h = posetnext_list(a)
+    b ∈ h && return push!(g,a,b)
+    push!(g,a)
+    for i ∈ 1:length(h)
+        if h[i] < b
+            p = between_list(h[i],b)
+            for t ∈ p
+                t ∉ g && push!(g,t)
+            end
+        end
+    end
+    return length(g) > 1 ? g : Array{PBTree,1}()
+end
+
+"""
+    between(a::AbstractPBTree,b::AbstractPBTree)
+
+Returns Grove of trees ordered between a and b
+"""
+between(a::PBTree,b::PBTree) = between_list(a,b) |> Grove
+between(a::AbstractPBTree,b::AbstractPBTree) = between(PBTree(a),PBTree(b))
 
 """
     ↗(a::AbstractPBTree, b::AbstractPBTree)

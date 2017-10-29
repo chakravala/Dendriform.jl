@@ -362,6 +362,7 @@ end
 convert(::Type{Array{PBTree,1}},g::Grove) = [trees(g)...] =#
 
 function convert(::Type{Grove},g::Array{PBTree,1})
+    length(g) == 0 && return Grove(0)
     λ = Array{UInt8,2}(length(g),g[1].degr)
     for i ∈ 1:length(g)
         λ[i,:] = g[i].Y
