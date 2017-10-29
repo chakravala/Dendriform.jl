@@ -165,7 +165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Dendriform.posetnext",
     "category": "Function",
-    "text": "Dendriform.posetnext(::PBTree)\n\nReturns an Array{PBTree,1} of trees that are greater than it\n\n\n\n"
+    "text": "posetnext(::AbstractPBTree)\n\nReturns a Grove that covers the given tree\n\n\n\n"
 },
 
 {
@@ -173,7 +173,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Dendriform.posetprev",
     "category": "Function",
-    "text": "Dendriform.posetprev(::PBTree)\n\nReturns an Array{PBTree,1} of trees that are less than it\n\n\n\n"
+    "text": "posetprev(::PBTree)\n\nReturns a Grove that covers the given tree\n\n\n\n"
 },
 
 {
