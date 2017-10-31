@@ -177,11 +177,43 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "library.html#Dendriform.:⋖",
+    "page": "Library",
+    "title": "Dendriform.:⋖",
+    "category": "Function",
+    "text": "⋖(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if b covers a in Tamari partial order\n\n\n\n"
+},
+
+{
+    "location": "library.html#Dendriform.:⋗",
+    "page": "Library",
+    "title": "Dendriform.:⋗",
+    "category": "Function",
+    "text": "⋗(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a covers b in Tamari partial order\n\n\n\n"
+},
+
+{
+    "location": "library.html#Dendriform.between",
+    "page": "Library",
+    "title": "Dendriform.between",
+    "category": "Function",
+    "text": "between(a::AbstractPBTree,b::AbstractPBTree)\n\nReturns Grove of trees ordered between a and b\n\n\n\n"
+},
+
+{
+    "location": "library.html#Dendriform.:⊴",
+    "page": "Library",
+    "title": "Dendriform.:⊴",
+    "category": "Function",
+    "text": "⊴(a::AbstractPBTree,b::AbstractPBTree)\n\nReturns Grove of trees ordered between a and b\n\n\n\n"
+},
+
+{
     "location": "library.html#Partial-Ordering-1",
     "page": "Library",
     "title": "Partial Ordering",
     "category": "section",
-    "text": "Dendriform.posetnextDendriform.posetprevBase.<Base.>Base.≤Base.≥"
+    "text": "posetnextposetprev⋖⋗Base.<Base.>Base.≤Base.≥between⊴"
 },
 
 {
