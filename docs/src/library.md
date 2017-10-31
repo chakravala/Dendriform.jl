@@ -53,11 +53,19 @@ right
 ### Partial Ordering
 
 ```@docs
-Dendriform.posetnext
+posetnext
 ```
 
 ```@docs
-Dendriform.posetprev
+posetprev
+```
+
+```@docs
+⋖
+```
+
+```@docs
+⋗
 ```
 
 ```@docs
@@ -75,6 +83,16 @@ Base.≤
 ```@docs
 Base.≥
 ```
+
+```@docs
+between
+```
+
+```@docs
+⊴
+```
+
+
 
 ### Dialgebra Arithmetic
 

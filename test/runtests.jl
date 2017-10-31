@@ -57,10 +57,15 @@ d = 5
 @test ((x,y)=(Grove(3,7),Grove(2,1)); σ(x+y)==σ(y)+σ(x) && σ(x*y)==σ(x)*σ(y))
 @test ((x,y)=(PBTree(3,4),PBTree(4,7)); σ(x∨y)==σ(y)∨σ(x)
   && σ(↗(x,y))==↖(σ(y),σ(x)) && σ(↖(x,y))==↗(σ(y),σ(x)))
+@test (PBTree(1,1) / PBTree(1,1)) == σ(PBTree(1,1) \ PBTree(1,1))
 @test (f=PBTree([1,2,5,2,1,11,1,2,5,2,1]); ==(typeof.([Dendriform.posetprev(f),Dendriform.posetnext(f)])...))
+@test [1,3,1] ⋖ [3,2,1] && [3,2,1] ⋗ [1,3,1]
 @test [1,2,5,2,1] ≤ [1,5,3,2,1] && [3,2,1] ≥ [1,3,1]
 @test [1,2,5,2,1] < [1,5,3,2,1] && [3,2,1] > [1,3,1]
+@test [1,2,3,4,5] ≤ [5,4,3,2,1] && [5,4,3,2,1] ≥ [1,2,3,4,5]
 @test Grove(d,1)<Grove(d,d) && Grove(d,d)>Grove(d,1)
 @test Grove(d,1)≤Grove(d,d) && Grove(d,d)≥Grove(d,1)
-@test Grove(Dendriform.posetnext(PBTree([1,2,3]))) == Grove(3,6)
+@test posetnext([1,2,3]) == Grove(3,6)
+@test posetprev([1,2,3]) == Grove(0)
+@test ⊴([1,2,3,4],[4,3,2,1]) == Grove(4)
 @test print(DevNull,PBTree(0,1)) == nothing

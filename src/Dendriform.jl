@@ -217,6 +217,7 @@ Applies the involution to any PBTree or Grove object
 
 include("morphism.jl")
 include("arithmetic.jl")
+include("poset.jl")
 
 # Total Grove Repository
 
