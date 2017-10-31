@@ -173,7 +173,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Dendriform.posetprev",
     "category": "Function",
-    "text": "posetprev(::PBTree)\n\nReturns a Grove that covers the given tree\n\n\n\n"
+    "text": "posetprev(::AbstractPBTree)\n\nReturns a Grove that covers the given tree\n\n\n\n"
 },
 
 {
