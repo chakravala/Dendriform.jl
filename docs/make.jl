@@ -12,7 +12,7 @@ makedocs(
     sitename = "Dendriform.jl",
     authors = "Michael Reed",
     pages = Any[
-        "Home" => "index.md"
+        "Home" => "index.md",
         "Library" => "library.md"
         ]
 )

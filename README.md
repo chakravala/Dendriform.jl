@@ -14,7 +14,7 @@ Installation of latest release version using Julia:
 ```Julia
 julia> Pkg.add("Dendriform")
 ```
-Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`; `∨` for `graft`; `left` and `right` for branching; `<`, `>`, `≤`, `≥` for Tamari's partial ordering; `↗` and `↖` (i.e. `over` and `under`); and the `dashv` and `vdash` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
+Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`; `∨` for `graft`; `left` and `right` for branching; `⋖`, `⋗`, `<`, `>`, `≤`, `≥` for Tamari's partial ordering; `⊴` for `between`; `↗` and `↖` (i.e. `over` and `under`); and the `dashv` and `vdash` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
 
 View the documentation [stable](https://chakravala.github.io/Dendriform.jl/stable) / [latest](https://chakravala.github.io/Dendriform.jl/latest) for more features and examples.
 
@@ -57,16 +57,16 @@ Basic usage examples:
 julia> using Dendriform
 
 julia> Grove(3,7) ⊣ [1,2]∪[2,1]
-[1,2,5,1,2] ↦ [3]∅∅[2,5][1,4] ↦ 20/42 or 21807
-[1,2,5,2,1] ↦ [3]∅∅[2,4][1,5] ↦ 21/42 or 21906
-[2,1,5,1,2] ↦ [3]∅∅[1,5][2,4] ↦ 22/42 or 22797
-[2,1,5,2,1] ↦ [3]∅∅[1,4][2,5] ↦ 23/42 or 22896
-[1,5,3,1,2] ↦ [2]∅[3][5][1,4] ↦ 27/42 or 30807
-[1,5,2,1,3] ↦ [2]∅[5][3][1,4] ↦ 25/42 or 29007
-[1,5,1,2,3] ↦ [2]∅[5][4][1,3] ↦ 24/42 or 28908
-[1,5,3,2,1] ↦ [2]∅[3][4][1,5] ↦ 28/42 or 30906
-[1,5,1,3,1] ↦ [2]∅[4]∅[1,3,5] ↦ 26/42 or 30186
-267911168 Y5 #9/42 [0.006092%]
+[1,2,5,1,2]
+[1,2,5,2,1]
+[2,1,5,1,2]
+[2,1,5,2,1]
+[1,5,3,1,2]
+[1,5,2,1,3]
+[1,5,1,2,3]
+[1,5,3,2,1]
+[1,5,1,3,1]
+Y5 #9/42
 
 julia> Grove(2,3) * [1,2,3]∪[3,2,1] |> GroveBin
 2981131286847743360614880957207748817969 Y6 #30/132 [54.75%]

@@ -4,7 +4,7 @@ module Dendriform
 # This file is part of Dendriform.jl. It is licensed under the GPL license
 # Dendriform Copyright (C) 2017 Michael Reed
 
-export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovecomposition
+export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovecomposition, grovedisplay
 
 # definitions
 
@@ -386,22 +386,36 @@ end
 
 # printing
 
+"""
+    grovedisplay(::Bool)
+
+Toggles the display output of grove index data (disabled by default)
+"""
+grovedisplay = ( () -> begin
+        gs=false
+        return (tf=gs)->(gs≠tf && (gs=tf); return gs)
+    end)()
+
+
+
 function print(io::IO,υ::PBTree,μ::BaseTree)
     n = υ.degr
     if n == 0x00
-        print(io,"∅ ↦ [∅] ↦ 0/1 or 0")
+        print(io,"∅"*(grovedisplay() ? " ↦ [∅] ↦ 0/1 or 0" : ""))
         return nothing
     end
     ti = TreeInteger(μ)
     tin = treeindex(n,ti)
     show(io,convert(Array{Int,1},υ.Y))
-    print(io," ↦ ")
-    for ω ∈ 1:length(υ.Y)
-        μ.μ[ω]==[] ? print(io,'∅'):show(io,convert(Array{Int,1},μ.μ[ω]))
+    if grovedisplay()
+        print(io," ↦ ")
+        for ω ∈ 1:length(υ.Y)
+            μ.μ[ω]==[] ? print(io,'∅'):show(io,convert(Array{Int,1},μ.μ[ω]))
+        end
+        print(io," ↦ ")
+        print(io,tin,"/",Cn(n)," or ")
+        show(io,ti)
     end
-    print(io," ↦ ")
-    print(io,tin,"/",Cn(n)," or ")
-    show(io,ti)
     print(io,'\n')
 end
 
@@ -412,7 +426,11 @@ function print(io::IO,Y::Grove) # given Loday label grove
     for η ∈ 1:Y.size
         print(io,PBTree(Y.Y[η,:]))
     end
-    print(io,GroveBin(Y))
+    if grovedisplay()
+        print(io,GroveBin(Y))
+    else
+        print(io,"Y$(Y.degr) "*'#'*"$(Y.size)/$(Cn(Y.degr))")
+    end
 end
 
 function print(io::IO,Y::Array{BaseTree,1}) # given Index label grove
@@ -427,8 +445,8 @@ function print(io::IO,Y::Array{Grove,1})
     end
 end
 
-function print(io::IO,k::GroveBin)
-  print(io,"$(k.gbin) Y$(k.degr) "*'#'*"$(k.size)/$(Cn(k.degr)) [$(k.ppos)"*'%'*"]")
+function print(io::IO,k::GroveBin) 
+    print(io,"$(k.gbin) Y$(k.degr) "*'#'*"$(k.size)/$(Cn(k.degr)) [$(k.ppos)"*'%'*"]")
 end
 
 end

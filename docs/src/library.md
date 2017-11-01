@@ -29,7 +29,7 @@ Dendriform.BaseTree
 ## Dendriform Operators
 
 ```@docs
-Base.∪
+∪
 ```
 
 ### Branching
@@ -69,19 +69,19 @@ posetprev
 ```
 
 ```@docs
-Base.<
+<
 ```
 
 ```@docs
-Base.>
+>
 ```
 
 ```@docs
-Base.≤
+≤
 ```
 
 ```@docs
-Base.≥
+≥
 ```
 
 ```@docs
@@ -113,6 +113,14 @@ under
 ```
 
 ```@docs
+/
+```
+
+```@docs
+\
+```
+
+```@docs
 dashv
 ```
 
@@ -129,11 +137,11 @@ vdash
 ```
 
 ```@docs
-Base.+
++
 ```
 
 ```@docs
-Base.*
+*
 ```
 
 ## Dendriform Morphisms
@@ -175,10 +183,6 @@ treeindex
 ```
 
 ```@docs
-treeindexCn
-```
-
-```@docs
 groveindex
 ```
 
@@ -201,6 +205,10 @@ Dendriform.TreeRational
 ```
 
 ## Tools & Options
+
+```@docs
+grovedisplay
+```
 
 ```@docs
 grovesort
