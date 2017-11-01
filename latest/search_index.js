@@ -113,11 +113,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "library.html#Base.:∪",
+    "page": "Library",
+    "title": "Base.:∪",
+    "category": "Function",
+    "text": "∪(g...)\n\nReturns union of AbstractGrove objects\n\n\n\n"
+},
+
+{
     "location": "library.html#Dendriform-Operators-1",
     "page": "Library",
     "title": "Dendriform Operators",
     "category": "section",
-    "text": "Base.∪"
+    "text": "∪"
 },
 
 {
@@ -193,6 +201,38 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "library.html#Base.:<",
+    "page": "Library",
+    "title": "Base.:<",
+    "category": "Function",
+    "text": "<(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a < b in Tamari partial order\n\n\n\n"
+},
+
+{
+    "location": "library.html#Base.:>",
+    "page": "Library",
+    "title": "Base.:>",
+    "category": "Function",
+    "text": ">(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a > b in Tamari partial order\n\n\n\n"
+},
+
+{
+    "location": "library.html#Base.:≤",
+    "page": "Library",
+    "title": "Base.:≤",
+    "category": "Function",
+    "text": "≤(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a ≤ b in Tamari partial order\n\n\n\n"
+},
+
+{
+    "location": "library.html#Base.:≥",
+    "page": "Library",
+    "title": "Base.:≥",
+    "category": "Function",
+    "text": "≥(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a ≥ b in Tamari partial order\n\n\n\n"
+},
+
+{
     "location": "library.html#Dendriform.between",
     "page": "Library",
     "title": "Dendriform.between",
@@ -213,7 +253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Partial Ordering",
     "category": "section",
-    "text": "posetnextposetprev⋖⋗Base.<Base.>Base.≤Base.≥between⊴"
+    "text": "posetnextposetprev⋖⋗<>≤≥between⊴"
 },
 
 {
@@ -249,6 +289,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "library.html#Base.:/",
+    "page": "Library",
+    "title": "Base.:/",
+    "category": "Function",
+    "text": "/(a::PBTree, b::PBTree)\n\nReturns PBTRee obtained from a over b operation\n\n\n\n"
+},
+
+{
+    "location": "library.html#Base.:\\",
+    "page": "Library",
+    "title": "Base.:\\",
+    "category": "Function",
+    "text": "(a::PBTree, b::PBTree)\n\nReturns PBTRee obtained from a under b operation\n\n\n\n"
+},
+
+{
     "location": "library.html#Dendriform.dashv",
     "page": "Library",
     "title": "Dendriform.dashv",
@@ -281,11 +337,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "library.html#Base.:+",
+    "page": "Library",
+    "title": "Base.:+",
+    "category": "Function",
+    "text": "+(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a + b operation\n\n\n\n"
+},
+
+{
+    "location": "library.html#Base.:*",
+    "page": "Library",
+    "title": "Base.:*",
+    "category": "Function",
+    "text": "*(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a × b operation\n\n\n\n"
+},
+
+{
     "location": "library.html#Dialgebra-Arithmetic-1",
     "page": "Library",
     "title": "Dialgebra Arithmetic",
     "category": "section",
-    "text": "overunder↗↖dashvvdash⊣⊢Base.+Base.*"
+    "text": "overunder↗↖/\\dashvvdash⊣⊢+*"
 },
 
 {
@@ -389,7 +461,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Index Data",
     "category": "section",
-    "text": "treeindextreeindexCngroveindexgrovebit"
+    "text": "treeindexgroveindexgrovebit"
 },
 
 {
@@ -425,6 +497,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "library.html#Dendriform.grovedisplay",
+    "page": "Library",
+    "title": "Dendriform.grovedisplay",
+    "category": "Function",
+    "text": "grovedisplay(::Bool)\n\nToggles the display output of grove index data (disabled by default)\n\n\n\n"
+},
+
+{
     "location": "library.html#Dendriform.grovesort",
     "page": "Library",
     "title": "Dendriform.grovesort",
@@ -445,7 +525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Tools & Options",
     "category": "section",
-    "text": "grovesorttreeshift"
+    "text": "grovedisplaygrovesorttreeshift"
 },
 
 ]}
