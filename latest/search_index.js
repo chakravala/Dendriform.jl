@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Setup",
     "category": "section",
-    "text": "Installation of latest release version using Julia:julia> Pkg.add(\"Dendriform\")Provides the types PBTree for planar binary trees, Grove for tree collections of constant degree, and GroveBin to compress grove data. This package defines various essential operations on planar binary trees and groves like ∪ for union; ∨ for graft; left and right for branching; <, >, ≤, ≥ for Tamari's partial ordering; ↗ and ↖ (i.e. over and under); and the dashv and vdash operations ⊣, ⊢, +, * for dendriform algebra."
+    "text": "Installation of latest release version using Julia:julia> Pkg.add(\"Dendriform\")Provides the types PBTree for planar binary trees, Grove for tree collections of constant degree, and GroveBin to compress grove data. This package defines various essential operations on planar binary trees and groves like ∪ for union; ∨ for graft; left and right for branching; <, >, ≤, ≥ for Tamari\'s partial ordering; / and \\ (i.e. over and under); and the dashv and vdash operations ⊣, ⊢, +, * for dendriform algebra."
 },
 
 {
@@ -76,15 +76,15 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.PBTree",
     "page": "Library",
     "title": "Dendriform.PBTree",
-    "category": "Type",
-    "text": "Planar Binary Tree with Loday's notation\n\nSummary\n\nmutable struct PBTree <: AbstractGrove\n\nFields\n\ndegr::UInt8 Y::Array{UInt8,1}\n\n\n\n"
+    "category": "type",
+    "text": "Planar Binary Tree with Loday\'s notation\n\nSummary\n\nmutable struct PBTree <: AbstractGrove\n\nFields\n\ndegr::UInt8 Y::Array{UInt8,1}\n\n\n\n"
 },
 
 {
     "location": "library.html#Dendriform.Grove",
     "page": "Library",
     "title": "Dendriform.Grove",
-    "category": "Type",
+    "category": "type",
     "text": "Grove of planar binary trees, matrix equivalence class\n\nSummary\n\nmutable struct Grove <: AbstractGrove\n\nFields\n\ndegr::UInt8 size::Int Y::Array{UInt8,2}\n\n\n\n"
 },
 
@@ -92,7 +92,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.GroveBin",
     "page": "Library",
     "title": "Dendriform.GroveBin",
-    "category": "Type",
+    "category": "type",
     "text": "Compressed binary representation of grove\n\nSummary\n\nmutable struct GroveBin <: AbstractGrove\n\nFields\n\ndegr::UInt8 size::Int gbin::Integer ppos::Float16\n\n\n\n"
 },
 
@@ -100,7 +100,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.BaseTree",
     "page": "Library",
     "title": "Dendriform.BaseTree",
-    "category": "Type",
+    "category": "type",
     "text": "Descending greatest integer search data for grove\n\nSummary\n\nmutable struct BaseTree <: Abstract Grove\n\nFields\n\nμ::Array{Array{UInt8,1},1}\n\n\n\n"
 },
 
@@ -116,7 +116,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Base.:∪",
     "page": "Library",
     "title": "Base.:∪",
-    "category": "Function",
+    "category": "function",
     "text": "∪(g...)\n\nReturns union of AbstractGrove objects\n\n\n\n"
 },
 
@@ -132,7 +132,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.graft",
     "page": "Library",
     "title": "Dendriform.graft",
-    "category": "Function",
+    "category": "function",
     "text": "graft(left::AbstractPBTree, right::AbstractPBTree)\n\nGrafts the left and right PBTree with root vertex\n\n\n\n"
 },
 
@@ -140,7 +140,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.:∨",
     "page": "Library",
     "title": "Dendriform.:∨",
-    "category": "Function",
+    "category": "function",
     "text": "∨(left::AbstractPBTree, right::AbstractPBTree)\n\nGrafts the left and right AbstractPBTree objects\n\n\n\n"
 },
 
@@ -148,7 +148,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.left",
     "page": "Library",
     "title": "Dendriform.left",
-    "category": "Function",
+    "category": "function",
     "text": "left(::AbstractPBTree)\n\nReturns the left branch of an AbstractPBTree\n\n\n\n"
 },
 
@@ -156,7 +156,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.right",
     "page": "Library",
     "title": "Dendriform.right",
-    "category": "Function",
+    "category": "function",
     "text": "right(::AbstractPBTree)\n\nReturns the right branch of an AbstractPBTree\n\n\n\n"
 },
 
@@ -172,7 +172,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.posetnext",
     "page": "Library",
     "title": "Dendriform.posetnext",
-    "category": "Function",
+    "category": "function",
     "text": "posetnext(::AbstractPBTree)\n\nReturns a Grove that covers the given tree\n\n\n\n"
 },
 
@@ -180,7 +180,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.posetprev",
     "page": "Library",
     "title": "Dendriform.posetprev",
-    "category": "Function",
+    "category": "function",
     "text": "posetprev(::AbstractPBTree)\n\nReturns a Grove that covers the given tree\n\n\n\n"
 },
 
@@ -188,7 +188,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.:⋖",
     "page": "Library",
     "title": "Dendriform.:⋖",
-    "category": "Function",
+    "category": "function",
     "text": "⋖(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if b covers a in Tamari partial order\n\n\n\n"
 },
 
@@ -196,7 +196,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.:⋗",
     "page": "Library",
     "title": "Dendriform.:⋗",
-    "category": "Function",
+    "category": "function",
     "text": "⋗(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a covers b in Tamari partial order\n\n\n\n"
 },
 
@@ -204,7 +204,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Base.:<",
     "page": "Library",
     "title": "Base.:<",
-    "category": "Function",
+    "category": "function",
     "text": "<(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a < b in Tamari partial order\n\n\n\n"
 },
 
@@ -212,7 +212,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Base.:>",
     "page": "Library",
     "title": "Base.:>",
-    "category": "Function",
+    "category": "function",
     "text": ">(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a > b in Tamari partial order\n\n\n\n"
 },
 
@@ -220,7 +220,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Base.:≤",
     "page": "Library",
     "title": "Base.:≤",
-    "category": "Function",
+    "category": "function",
     "text": "≤(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a ≤ b in Tamari partial order\n\n\n\n"
 },
 
@@ -228,7 +228,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Base.:≥",
     "page": "Library",
     "title": "Base.:≥",
-    "category": "Function",
+    "category": "function",
     "text": "≥(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns Bool that tells if a ≥ b in Tamari partial order\n\n\n\n"
 },
 
@@ -236,7 +236,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.between",
     "page": "Library",
     "title": "Dendriform.between",
-    "category": "Function",
+    "category": "function",
     "text": "between(a::AbstractPBTree,b::AbstractPBTree)\n\nReturns Grove of trees ordered between a and b\n\n\n\n"
 },
 
@@ -244,7 +244,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.:⊴",
     "page": "Library",
     "title": "Dendriform.:⊴",
-    "category": "Function",
+    "category": "function",
     "text": "⊴(a::AbstractPBTree,b::AbstractPBTree)\n\nReturns Grove of trees ordered between a and b\n\n\n\n"
 },
 
@@ -260,55 +260,39 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.over",
     "page": "Library",
     "title": "Dendriform.over",
-    "category": "Function",
-    "text": "over(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns PBTRee obtained from a over b operation\n\n\n\n"
+    "category": "function",
+    "text": "over(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns PBTree obtained from a over b operation\n\n\n\n"
 },
 
 {
     "location": "library.html#Dendriform.under",
     "page": "Library",
     "title": "Dendriform.under",
-    "category": "Function",
-    "text": "under(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns PBTRee obtained from a under b operation\n\n\n\n"
-},
-
-{
-    "location": "library.html#Dendriform.↗",
-    "page": "Library",
-    "title": "Dendriform.↗",
-    "category": "Function",
-    "text": "↗(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns PBTRee obtained from a over b operation\n\n\n\n"
-},
-
-{
-    "location": "library.html#Dendriform.↖",
-    "page": "Library",
-    "title": "Dendriform.↖",
-    "category": "Function",
-    "text": "↖(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns PBTRee obtained from a under b operation\n\n\n\n"
+    "category": "function",
+    "text": "under(a::AbstractPBTree, b::AbstractPBTree)\n\nReturns PBTree obtained from a under b operation\n\n\n\n"
 },
 
 {
     "location": "library.html#Base.:/",
     "page": "Library",
     "title": "Base.:/",
-    "category": "Function",
-    "text": "/(a::PBTree, b::PBTree)\n\nReturns PBTRee obtained from a over b operation\n\n\n\n"
+    "category": "function",
+    "text": "/(a::PBTree, b::PBTree)\n\nReturns PBTree obtained from a over b operation\n\n\n\n"
 },
 
 {
     "location": "library.html#Base.:\\",
     "page": "Library",
     "title": "Base.:\\",
-    "category": "Function",
-    "text": "(a::PBTree, b::PBTree)\n\nReturns PBTRee obtained from a under b operation\n\n\n\n"
+    "category": "function",
+    "text": "\\(a::PBTree, b::PBTree)\n\nReturns PBTree obtained from a under b operation\n\n\n\n"
 },
 
 {
     "location": "library.html#Dendriform.dashv",
     "page": "Library",
     "title": "Dendriform.dashv",
-    "category": "Function",
+    "category": "function",
     "text": "dashv(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a ⊣ b operation\n\n\n\n"
 },
 
@@ -316,7 +300,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.vdash",
     "page": "Library",
     "title": "Dendriform.vdash",
-    "category": "Function",
+    "category": "function",
     "text": "vdash(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a ⊢ b operation\n\n\n\n"
 },
 
@@ -324,7 +308,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.:⊣",
     "page": "Library",
     "title": "Dendriform.:⊣",
-    "category": "Function",
+    "category": "function",
     "text": "⊣(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a ⊣ b operation\n\n\n\n"
 },
 
@@ -332,7 +316,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.:⊢",
     "page": "Library",
     "title": "Dendriform.:⊢",
-    "category": "Function",
+    "category": "function",
     "text": "⊢(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a ⊢ b operation\n\n\n\n"
 },
 
@@ -340,7 +324,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Base.:+",
     "page": "Library",
     "title": "Base.:+",
-    "category": "Function",
+    "category": "function",
     "text": "+(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a + b operation\n\n\n\n"
 },
 
@@ -348,7 +332,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Base.:*",
     "page": "Library",
     "title": "Base.:*",
-    "category": "Function",
+    "category": "function",
     "text": "*(a::AbstractGrove, b::AbstractGrove)\n\nReturns Grove obtained from a × b operation\n\n\n\n"
 },
 
@@ -357,14 +341,14 @@ var documenterSearchIndex = {"docs": [
     "page": "Library",
     "title": "Dialgebra Arithmetic",
     "category": "section",
-    "text": "overunder↗↖/\\dashvvdash⊣⊢+*"
+    "text": "overunder/\\dashvvdash⊣⊢+*"
 },
 
 {
     "location": "library.html#Dendriform.σ",
     "page": "Library",
     "title": "Dendriform.σ",
-    "category": "Function",
+    "category": "function",
     "text": "σ(g::AbstractGrove)\n\nApplies the involution to any PBTree or Grove object\n\n\n\n"
 },
 
@@ -380,7 +364,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.LeftInherited",
     "page": "Library",
     "title": "Dendriform.LeftInherited",
-    "category": "Function",
+    "category": "function",
     "text": "Dendriform.LeftInherited(::AbstractPBTree)\n\nReturns Bool that tells if PBTree is left inherited\n\n\n\n"
 },
 
@@ -388,7 +372,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.RightInherited",
     "page": "Library",
     "title": "Dendriform.RightInherited",
-    "category": "Function",
+    "category": "function",
     "text": "Dendriform.RightInherited(::AbstractPBTree)\n\nReturns Bool that tells if PBTree is right inherited\n\n\n\n"
 },
 
@@ -396,7 +380,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.PrimitiveTree",
     "page": "Library",
     "title": "Dendriform.PrimitiveTree",
-    "category": "Function",
+    "category": "function",
     "text": "Dendriform.PrimitiveTree(::AbstractPBTree)\n\nReturns Bool that tells if PBTree is primitive\n\n\n\n"
 },
 
@@ -404,7 +388,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.treecheck",
     "page": "Library",
     "title": "Dendriform.treecheck",
-    "category": "Function",
+    "category": "function",
     "text": "treecheck(::AbstractPBTree)\n\nReturns Bool that tells if PBTree is valid\n\n\n\n"
 },
 
@@ -412,7 +396,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.grovecheck",
     "page": "Library",
     "title": "Dendriform.grovecheck",
-    "category": "Function",
+    "category": "function",
     "text": "grovecheck(::AbstractGrove)\n\nReturns Bool that tells if Grove is valid\n\n\n\n"
 },
 
@@ -420,7 +404,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.GroveError",
     "page": "Library",
     "title": "Dendriform.GroveError",
-    "category": "Function",
+    "category": "function",
     "text": "Dendriform.GroveError(::AbstractGrove)\n\nReturns Array with Grove sorting index error\n\n\n\n"
 },
 
@@ -436,7 +420,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.treeindex",
     "page": "Library",
     "title": "Dendriform.treeindex",
-    "category": "Function",
+    "category": "function",
     "text": "treeindex(::AbstractGrove)\n\nReturns tree indices of any PBTree or Grove\n\n\n\n"
 },
 
@@ -444,7 +428,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.groveindex",
     "page": "Library",
     "title": "Dendriform.groveindex",
-    "category": "Function",
+    "category": "function",
     "text": "groveindex(::AbstractGrove)\n\nReturns the grove index of any Grove\n\n\n\n"
 },
 
@@ -452,7 +436,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.grovebit",
     "page": "Library",
     "title": "Dendriform.grovebit",
-    "category": "Function",
+    "category": "function",
     "text": "grovebit(::AbstractGrove)\n\nReturns a BitArray of tree indices\n\n\n\n"
 },
 
@@ -468,7 +452,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.TreeBase",
     "page": "Library",
     "title": "Dendriform.TreeBase",
-    "category": "Function",
+    "category": "function",
     "text": "Dendriform.TreeBase(::AbstractGrove)\n\nReturns BaseTree objects for any AbstractGrove\n\n\n\n"
 },
 
@@ -476,7 +460,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.TreeInteger",
     "page": "Library",
     "title": "Dendriform.TreeInteger",
-    "category": "Function",
+    "category": "function",
     "text": "Dendriform.TreeInteger(::AbstractGrove)\n\nReturns the tree integers of any AbstractGrove\n\n\n\n"
 },
 
@@ -484,7 +468,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.TreeRational",
     "page": "Library",
     "title": "Dendriform.TreeRational",
-    "category": "Function",
+    "category": "function",
     "text": "Dendriform.TreeRational(::AbstractGrove)\n\nReturns the tree rationals of any AbstractGrove\n\n\n\n"
 },
 
@@ -500,7 +484,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.grovedisplay",
     "page": "Library",
     "title": "Dendriform.grovedisplay",
-    "category": "Function",
+    "category": "function",
     "text": "grovedisplay(::Bool)\n\nToggles the display output of grove index data (disabled by default)\n\n\n\n"
 },
 
@@ -508,7 +492,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.grovesort",
     "page": "Library",
     "title": "Dendriform.grovesort",
-    "category": "Function",
+    "category": "function",
     "text": "grovesort(::Bool)\n\nToggles the grovesort algorithm (enabled by default - RECOMMENDED)\n\n\n\n"
 },
 
@@ -516,7 +500,7 @@ var documenterSearchIndex = {"docs": [
     "location": "library.html#Dendriform.treeshift",
     "page": "Library",
     "title": "Dendriform.treeshift",
-    "category": "Function",
+    "category": "function",
     "text": "treeshift(::Bool)\n\nToggles the shift for the tree integers / rationals\n\n\n\n"
 },
 
