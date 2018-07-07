@@ -1,7 +1,7 @@
 # This file is part of Dendriform.jl. It is licensed under the GPL license
 # Dendriform Copyright (C) 2017 Michael Reed
 
-export ⋖, ⋗, posetnext, posetprev, between, ⊴, over, under, ↗, ↖
+export ⋖, ⋗, posetnext, posetprev, between, ⊴, over, under
 
 # poset coverings
 
@@ -179,43 +179,118 @@ import Base: /, \
 """
     over(a::AbstractPBTree, b::AbstractPBTree)
 
-Returns PBTRee obtained from a over b operation
+Returns PBTree obtained from a over b operation
 """
 over(x::PBTree,y::PBTree) = y.degr > 0 ? over(x,left(y)) ∨ right(y) : x
 over(x::AbstractPBTree,y::AbstractPBTree) = over(PBTree(x),PBTree(y))
 
 """
-    ↗(a::AbstractPBTree, b::AbstractPBTree)
-
-Returns PBTRee obtained from a over b operation
-"""
-↗(x::AbstractPBTree,y::AbstractPBTree) = over(x,y)
-
-"""
     /(a::PBTree, b::PBTree)
 
-Returns PBTRee obtained from a over b operation
+Returns PBTree obtained from a over b operation
 """
 /(x::PBTree,y::PBTree) = over(x,y)
 
 """
     under(a::AbstractPBTree, b::AbstractPBTree)
 
-Returns PBTRee obtained from a under b operation
+Returns PBTree obtained from a under b operation
 """
 under(x::PBTree,y::PBTree) = x.degr > 0 ? left(x) ∨ under(right(x),y) : y
 under(x::AbstractPBTree,y::AbstractPBTree) = under(PBTree(x),PBTree(y))
 
 """
-    ↖(a::AbstractPBTree, b::AbstractPBTree)
+    \\(a::PBTree, b::PBTree)
 
-Returns PBTRee obtained from a under b operation
-"""
-↖(x::AbstractPBTree,y::AbstractPBTree) = under(x,y)
-
-"""
-    \(a::PBTree, b::PBTree)
-
-Returns PBTRee obtained from a under b operation
+Returns PBTree obtained from a under b operation
 """
 \(x::PBTree,y::PBTree) = under(x,y)
+
+# interval tools
+
+function intervals(d::Int)
+    g = Array{BigInt,1}()
+    for i∈1:Int(Cn(d)),j∈1:Int(Cn(d))
+        t = PBTree(d,i) ⊴ PBTree(d,j)
+        t ≠ Grove(0) && push!(g,GroveBin(t).gbin)
+    end
+    return sort!(g)
+end
+
+function intcomp(d::Int)
+    ins = intervals(d)
+    lins = length(ins)
+    cc = zeros(Int,lins)
+    cn = 0
+    for q ∈ 1:d-1
+        for i ∈ 1:Int(groveindex(Grove(q))), j ∈ 1:Int(groveindex(Grove(d-q)))
+            z = GroveBin(Grove(q,i) + Grove(d-q,j))
+            f = find(s->s==z.gbin, ins)
+            length(f) == 0 ? (cn += 1) : (cc[f] += 1)
+        end
+    end
+    info("Non-intervals: $cn")
+    return cc
+end
+
+function intcompt(d::Int)
+    ins = intervals(d)
+    lins = length(ins)
+    cc = zeros(Int,lins)
+    cn = 0
+    for q ∈ 1:d-1
+        for i ∈ 1:Int(Cn(q)), j ∈ 1:Int(Cn(d-q))
+            z = GroveBin(PBTree(q,i) + PBTree(d-q,j))
+            f = find(s->s==z.gbin, ins)
+            length(f) == 0 ? (cn += 1) : (cc[f] += 1)
+        end
+    end
+    #info("Non-intervals: $cn")
+    return cc
+end
+
+function between_list_full(a::PBTree,b::PBTree)
+    a == b && return true
+    h = posetnext_list(a)
+    not = true
+    for i ∈ 1:length(h)
+        if h[i] ≤ b
+            not = not & between_list_full(h[i],b)
+        else
+            not = false
+        end
+    end
+    return not
+end
+
+function intervals_full(d::Int)
+    g = Array{BigInt,1}()
+    f = BitArray{1}()
+    for i∈1:Int(Cn(d)),j∈1:Int(Cn(d))
+        t = PBTree(d,i) ⊴ PBTree(d,j)
+        t ≠ Grove(0) && (push!(g,GroveBin(t).gbin);push!(f,between_list_full(PBTree(d,i),PBTree(d,j))))
+    end
+    return f[sortperm(g)]
+end
+
+function print_interval_bin(d::Int)
+    ins = intervals(d)
+    for i ∈ ins
+        lpad(bin(i),Cn(d),"0") |> println
+    end
+end
+
+function print_intcomp_bin(d::Int)
+    ins = intervals(d)[find(s->s>0,intcomp(d))]
+    inst = intervals(d)[find(s->s>0,intcompt(d))]
+    for i ∈ ins
+        i ∉ inst && (lpad(bin(i),Cn(d),"0") |> println)
+    end
+end
+
+function print_intcompt_bin(d::Int)
+    ins = intervals(d)[find(s->s>0,intcompt(d))]
+    for i ∈ ins
+        lpad(bin(i),Cn(d),"0") |> println
+    end
+end

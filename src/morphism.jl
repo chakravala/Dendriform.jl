@@ -39,7 +39,7 @@ Returns Bool that tells if PBTree is valid
 treecheck(d::UI8I,t::Int) = t > 0 && t <= Cn(d)
 treecheck(t::PBTree) = treecheck(t.degr,treeindex(t))
 treecheck(t::Ar1UI8I) = treecheck(convert(PBTree,t))
-treecheck(g::Grove) = findfirst(x->(x==0),treeindex(g)) == 0
+treecheck(g::Grove) = findfirst(x->(x==0),treeindex(g)) == (VERSION < v"0.7.0-" ? 0 : nothing)
 treecheck(g::NotGrove) = treecheck(convert(Grove,g))
 
 """
@@ -72,7 +72,8 @@ function treeindex(d::UI8I,l::Int,g::Ar2UI8I)
     ind=Array{Int,1}(l)
     i=TreeInteger(g)
     for c ∈ 1:l
-        ind[c] = findfirst(v.==i[c])
+        indc = findfirst(v.==i[c])
+        ind[c] = indc == nothing ? 0 : indc
     end
     return ind
 end

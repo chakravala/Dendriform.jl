@@ -49,6 +49,7 @@ d = 5
 @test Grove(8,groveindex(Grove(5,1000)+Grove(3,7)))==Grove(5,1000)+Grove(3,7)
 @test (x = PBTree(1,1); GroveBin(x)*x == x*GroveBin(x) == [1]*GroveBin(x) == 1*x
   == 1*GroveBin(x) == GroveBin(x)*Grove(x))
+@test GroveBin(5) == GroveBin(GroveBin(3)+GroveBin(2))
 @test grovecomposition(3,groveindex(3)) == 4
 @test grovecomposition(3,1) == 1
 @test println(Grove(3,7)) == print(TreeBase([1:d...]))
@@ -61,7 +62,7 @@ d = 5
 grovedisplay(false)
 @test ((x,y)=(Grove(3,7),Grove(2,1)); σ(x+y)==σ(y)+σ(x) && σ(x*y)==σ(x)*σ(y))
 @test ((x,y)=(PBTree(3,4),PBTree(4,7)); σ(x∨y)==σ(y)∨σ(x)
-  && σ(↗(x,y))==↖(σ(y),σ(x)) && σ(↖(x,y))==↗(σ(y),σ(x)))
+  && σ(/(x,y))==\(σ(y),σ(x)) && σ(\(x,y))==/(σ(y),σ(x)))
 @test (PBTree(1,1) / PBTree(1,1)) == σ(PBTree(1,1) \ PBTree(1,1))
 @test (f=PBTree([1,2,5,2,1,11,1,2,5,2,1]); ==(typeof.([Dendriform.posetprev(f),Dendriform.posetnext(f)])...))
 @test [1,3,1] ⋖ [3,2,1] && [3,2,1] ⋗ [1,3,1]
@@ -74,3 +75,5 @@ grovedisplay(false)
 @test posetprev([1,2,3]) == Grove(0)
 @test ⊴([1,2,3,4],[4,3,2,1]) == Grove(4)
 @test print(DevNull,PBTree(0,1)) == nothing
+@test Dendriform.intervals_full(3) |> typeof == BitArray{1}
+@test Dendriform.print_interval_bin(3) == Dendriform.print_intcomp_bin(3) == Dendriform.print_intcompt_bin(3)

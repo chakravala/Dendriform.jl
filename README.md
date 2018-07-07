@@ -14,7 +14,7 @@ Installation of latest release version using Julia:
 ```Julia
 julia> Pkg.add("Dendriform")
 ```
-Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`; `∨` for `graft`; `left` and `right` for branching; `⋖`, `⋗`, `<`, `>`, `≤`, `≥` for Tamari's partial ordering; `⊴` for `between`; `↗` and `↖` (i.e. `over` and `under`); and the `dashv` and `vdash` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
+Provides the types `PBTree` for planar binary trees, `Grove` for tree collections of constant degree, and `GroveBin` to compress grove data. This package defines various essential operations on planar binary trees and groves like `∪` for `union`; `∨` for `graft`; `left` and `right` for branching; `⋖`, `⋗`, `<`, `>`, `≤`, `≥` for Tamari's partial ordering; `⊴` for `between`; `/` and `\` (i.e. `over` and `under`); and the `dashv` and `vdash` operations `⊣`, `⊢`, `+`, `*` for dendriform algebra.
 
 View the documentation [stable](https://chakravala.github.io/Dendriform.jl/stable) / [latest](https://chakravala.github.io/Dendriform.jl/latest) for more features and examples.
 

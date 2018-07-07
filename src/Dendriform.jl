@@ -4,14 +4,15 @@ module Dendriform
 # This file is part of Dendriform.jl. It is licensed under the GPL license
 # Dendriform Copyright (C) 2017 Michael Reed
 
+using Combinatorics, Compat
+
 export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovecomposition, grovedisplay
+
+import Base: ==, +,*, /, ∪, <, >, ≤, ≥, promote_rule, convert, show, print
 
 # definitions
 
 abstract type AbstractGrove end
-
-importall Base
-using Combinatorics, Compat
 
 """
 Planar Binary Tree with Loday's notation
@@ -144,6 +145,7 @@ GroveBin(d::UI8I,s::Int,i::Integer) = GroveBin(UInt8(d),s,i,Float16(100i//(2^Cn(
 ==(a::PBTree,b::PBTree)=(a.degr == b.degr && a.Y == b.Y)
 ==(a::Grove,b::Grove)=(a.degr==b.degr && a.size==b.size && grovesort!(a).Y==grovesort!(b).Y)
 ==(a::BaseTree,b::BaseTree)=(a.μ==b.μ)
+==(a::GroveBin,b::GroveBin)=(a.degr==b.degr && a.size==b.size && a.gbin==b.gbin)
 
 # conversions / promotions
 
@@ -167,8 +169,8 @@ convert(::Type{Grove},g::Array{Any,1}) = convert(Grove,convert(Array{UInt8,1},g)
 convert(::Type{Grove},g::Array{Any,2}) = convert(Grove,convert(Array{UInt8,2},g))
 convert(::Type{Grove},g::GroveBin) = Grove(g.degr,g.gbin)
 convert(::Type{Grove},d::UI8I) = Υ(UInt8(d))
-promote_rule{T<:Ar1UI8I}(::Type{PBTree},::Type{T}) = PBTree
-promote_rule{T<:Union{Ar1UI8I,Ar2UI8I,PBTree,UI8I}}(::Type{Grove},::Type{T})=Grove
+promote_rule(::Type{PBTree},::Type{T}) where T<:Ar1UI8I = PBTree
+promote_rule(::Type{Grove},::Type{T}) where T<:Union{Ar1UI8I,Ar2UI8I,PBTree,UI8I} = Grove
 
 # display
 
@@ -410,7 +412,7 @@ function print(io::IO,υ::PBTree,μ::BaseTree)
     if grovedisplay()
         print(io," ↦ ")
         for ω ∈ 1:length(υ.Y)
-            μ.μ[ω]==[] ? print(io,'∅'):show(io,convert(Array{Int,1},μ.μ[ω]))
+            μ.μ[ω]==[] ? print(io,'∅') : show(io,convert(Array{Int,1},μ.μ[ω]))
         end
         print(io," ↦ ")
         print(io,tin,"/",Cn(n)," or ")

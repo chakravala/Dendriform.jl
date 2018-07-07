@@ -18,13 +18,13 @@ function ∪(x::Grove,y::Vararg{Grove})
         s += y[i].size
     end
     s = s - out.size
-    s ≠ 0 && info("$s duplicate$(s>1?'s':"") in grove union")
+    s ≠ 0 && info("$s duplicate$(s>1 ? 's' : "") in grove union")
     return out
 end
 
 ∪(x::NotGrove,y::Vararg{Grove}) = ∪(convert(Grove,x),y...)
-∪{T<:Union{NotGrove,Grove}}(x::Grove,y::Vararg{T}) = ∪(promote(x,y...)...)
-∪{T<:NotGrove}(x::NotGrove,y::Vararg{T}) = ∪(promote(convert(Grove,x),y...)...)
+∪(x::Grove,y::Vararg{T}) where T<:Union{NotGrove,Grove} = ∪(promote(x,y...)...)
+∪(x::NotGrove,y::Vararg{T}) where T<:NotGrove = ∪(promote(convert(Grove,x),y...)...)
 ∪(x::NotGrove) = Grove(x); ∪(x::Grove) = x
 
 # grafting
@@ -64,7 +64,7 @@ Returns the left branch of an AbstractPBTree
 """
 function left(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
-    fx>1 && (return PBTree(fx-1,t.Y[1:fx-1]))
+    typeof(fx) == Int && fx>1 && (return PBTree(fx-1,t.Y[1:fx-1]))
     return PBTree(0x00,Array{UInt8,1}(0))
 end
 
@@ -77,7 +77,7 @@ Returns the right branch of an AbstractPBTree
 """
 function right(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
-    fx<t.degr && (return PBTree(t.Y[fx+1:end]))
+    typeof(fx) == Int && fx<t.degr && (return PBTree(t.Y[fx+1:end]))
     return PBTree(0x00,Array{UInt8,1}(0))
 end
 
