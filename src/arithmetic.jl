@@ -18,7 +18,7 @@ function ∪(x::Grove,y::Vararg{Grove})
         s += y[i].size
     end
     s = s - out.size
-    s ≠ 0 && info("$s duplicate$(s>1 ? 's' : "") in grove union")
+    s ≠ 0 && (@info "$s duplicate$(s>1 ? 's' : "") in grove union")
     return out
 end
 
@@ -38,7 +38,7 @@ function ∨(L::PBTree,R::PBTree) # graft()
     Ld = L.degr
     Rd = R.degr
     n = Ld + Rd
-    G = PBTree(n+1,Array{UInt8,1}(n+1))
+    G = PBTree(n+1,Array{UInt8,1}(undef,n+1))
     G.Y[Ld+1] = n+1
     G.Y[1:Ld] = L.Y[:]
     G.Y[Ld+2:Ld+Rd+1] = R.Y[:]
@@ -65,7 +65,7 @@ Returns the left branch of an AbstractPBTree
 function left(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
     typeof(fx) == Int && fx>1 && (return PBTree(fx-1,t.Y[1:fx-1]))
-    return PBTree(0x00,Array{UInt8,1}(0))
+    return PBTree(0x00,Array{UInt8,1}(undef,0))
 end
 
 left(t::Ar1UI8I) = left(convert(PBTree,t))
@@ -78,7 +78,7 @@ Returns the right branch of an AbstractPBTree
 function right(t::PBTree)
     fx = findfirst(ξ->(ξ==t.degr),t.Y)
     typeof(fx) == Int && fx<t.degr && (return PBTree(t.Y[fx+1:end]))
-    return PBTree(0x00,Array{UInt8,1}(0))
+    return PBTree(0x00,Array{UInt8,1}(undef,0))
 end
 
 right(t::Ar1UI8I) = right(convert(PBTree,t))
@@ -95,9 +95,9 @@ function ⊣(x::PBTree,y::PBTree)
     y.degr == 0 && (return Grove(x))
     sm = right(x)+y
     blx = left(x)
-    isempty(sm.Y) && (return Grove(blx ∨ Array{UInt8,1}(0)))
+    isempty(sm.Y) && (return Grove(blx ∨ Array{UInt8,1}(undef,0)))
     ls = sm.size
-    addl = Grove(Array{UInt8,2}(ls,sm.degr + blx.degr + 1))
+    addl = Grove(Array{UInt8,2}(undef,ls,sm.degr + blx.degr + 1))
     for i ∈ 1:ls
         addl.Y[i,:] = (blx ∨ sm.Y[i,:]).Y
     end
@@ -108,7 +108,7 @@ function ⊣(x::Grove,y::PBTree)
     x.degr == 0 && (return Grove(0))
     y.degr == 0 && (return Grove(x))
     γ = x.size
-    gr = Array{Array,1}(γ)
+    gr = Array{Array,1}(undef,γ)
     for i ∈ 1:γ
         gr[i] = (PBTree(x.Y[i,:]) ⊣ y).Y
     end
@@ -119,7 +119,7 @@ function ⊣(x::PBTree,y::Grove)
     x.degr == 0 && (return Grove(0))
     y.degr == 0 && (return Grove(x))
     γ = y.size
-    gr = Array{Array,1}(γ)
+    gr = Array{Array,1}(undef,γ)
     for i ∈ 1:γ
         gr[i] = (x ⊣ PBTree(y.Y[i,:])).Y
     end
@@ -130,7 +130,7 @@ function ⊣(x::Grove,y::Grove)
     x.degr == 0 && (return Grove(0))
     y.degr == 0 && (return Grove(x))
     γ = x.size
-    gr = Array{Array,1}(γ)
+    gr = Array{Array,1}(undef,γ)
     for i ∈ 1:γ
         gr[i] = (PBTree(x.Y[i,:]) ⊣ y).Y
     end
@@ -161,9 +161,9 @@ function ⊢(x::PBTree,y::PBTree)
     x.degr == 0 && (return Grove(y))
     sm = x+left(y)
     bry = right(y)
-    isempty(sm.Y) && (return Grove(Array{UInt8,1}(0) ∨ bry))
+    isempty(sm.Y) && (return Grove(Array{UInt8,1}(undef,0) ∨ bry))
     ls = sm.size
-    addr = Grove(Array{UInt8,2}(ls,sm.degr + bry.degr + 1))
+    addr = Grove(Array{UInt8,2}(undef,ls,sm.degr + bry.degr + 1))
     for i ∈ 1:ls
         addr.Y[i,:] = (sm.Y[i,:] ∨ bry).Y
     end
@@ -174,7 +174,7 @@ function ⊢(x::PBTree,y::Grove)
     y.degr == 0 && (return Grove(0))
     x.degr == 0 && (return Grove(y))
     γ = y.size
-    gr = Array{Array,1}(γ)
+    gr = Array{Array,1}(undef,γ)
     for i ∈ 1:γ
         gr[i] = (x ⊢ PBTree(y.Y[i,:])).Y
     end
@@ -185,7 +185,7 @@ function ⊢(x::Grove,y::PBTree)
     y.degr == 0 && (return Grove(0))
     x.degr == 0 && (return Grove(y))
     γ = x.size
-    gr = Array{Array,1}(γ)
+    gr = Array{Array,1}(undef,γ)
     for i ∈ 1:γ
         gr[i] = (PBTree(x.Y[i,:]) ⊢ y).Y
     end
@@ -196,7 +196,7 @@ function ⊢(x::Grove,y::Grove)
     y.degr == 0 && (return Grove(0))
     x.degr == 0 && (return Grove(y))
     γ = x.size
-    gr = Array{Array,1}(γ)
+    gr = Array{Array,1}(undef,γ)
     for i ∈ 1:γ
         gr[i] = (PBTree(x.Y[i,:]) ⊢ y).Y
     end
@@ -227,7 +227,7 @@ function +(x::Grove,y::Grove)
     isempty(y.Y) && (return x)
     lx = x.size
     ly = y.size
-    ij = Array{Array,2}(lx,ly)
+    ij = Array{Array,2}(undef,lx,ly)
     for i ∈ 1:lx
         for j ∈ 1:ly
             l = Grove(PBTree(x.Y[i,:]) ⊣ PBTree(y.Y[j,:]))
@@ -257,7 +257,7 @@ end
 function *(x::Grove,y::Grove)::Grove
     x.degr == 0 && (return Grove(0))
     x.degr == 1 && (return y)
-    out = Array{Array,1}(x.size)
+    out = Array{Array,1}(undef,x.size)
     for j ∈ 1:x.size
         out[j] = (x.Y[j,:]*y).Y
     end

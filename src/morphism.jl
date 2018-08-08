@@ -69,7 +69,7 @@ Returns tree indices of any PBTree or Grove
 """
 function treeindex(d::UI8I,l::Int,g::Ar2UI8I)
     v=ΥI(d)
-    ind=Array{Int,1}(l)
+    ind=Array{Int,1}(undef,l)
     i=TreeInteger(g)
     for c ∈ 1:l
         indc = findfirst(v.==i[c])
@@ -108,7 +108,7 @@ grovebit(g::Union{Ar1UI8I,Ar2UI8I}) = grovebit(Grove(g))
 grovebit(g::GroveBin) = grovebit(g.degr,g.gbin)
 
 function grovebit(d::UI8I,s::Integer)
-    gb = '1' .== flipdim(collect(bin(s)),1)
+    gb = '1' .== reverse(collect(string(s,base=2)),dims=1)
     return vcat(gb,falses(Cn(d)-length(gb)))
 end
 
@@ -138,7 +138,7 @@ groveindex(g::NotGrove) = groveindex(convert(Grove,g))
 
 function groveindex(b::BitArray)
     s = BigInt(0)
-    gi = find(b)
+    gi = findall(b)
     for c ∈ length(gi):-1:1
         s += BigInt(2)^(gi[c]-1)
     end
@@ -147,11 +147,11 @@ end
 
 # TreeLoday
 
-TreeLoday(d::UI8I,s::BitArray) = TreeLoday(d,find(s))
+TreeLoday(d::UI8I,s::BitArray) = TreeLoday(d,findall(s))
 
 function TreeLoday(d::UI8I,ind::Array{Int,1}) # from treeindex
     y = Υ(d).Y
-    g = Grove(d,Array{UInt8,2}(length(ind),d))
+    g = Grove(d,Array{UInt8,2}(undef,length(ind),d))
     c = 1
     if d == 0
         g=Υ(0)
@@ -166,17 +166,17 @@ end
 
 function TreeLoday(υ::BaseTree) # from TreeBase
     γ = UInt8(length(υ.μ))
-    L = PBTree(γ,Array{UInt8,1}(γ))
+    L = PBTree(γ,Array{UInt8,1}(undef,γ))
     γ1 = γ+0x01
     for ω ∈ 0x01:γ
-        L.Y[υ.μ[ω]] = γ1-ω
+        L.Y[υ.μ[ω]] .= γ1-ω
     end
     return L
 end
 
 function TreeLoday(Y::Array{BaseTree,1})
     γ = length(Y)
-    L = Grove(Array{UInt8,2}(γ,length(Y[1].μ[:])))
+    L = Grove(Array{UInt8,2}(undef,γ,length(Y[1].μ[:])))
     for η ∈ 1:γ
         L.Y[η,:] = (TreeLoday(Y[η])).Y
     end
@@ -193,24 +193,24 @@ TreeLoday(d::UI8I,s::Integer) = Grove(d,s)
 
 Returns BaseTree objects for any AbstractGrove
 """
-TreeBase(d::UI8I,s::Integer) = TreeBase(d,grovebit(find(s)))
+TreeBase(d::UI8I,s::Integer) = TreeBase(d,grovebit(findall(s)))
 
 function TreeBase(d::UI8I,ind::BitArray) # from treeindex
     y = Υ(d).Y
-    g = Grove(Array{UInt8,2}(length(ind),d))
+    g = Grove(Array{UInt8,2}(undef,length(ind),d))
     c = 1
     for i ∈ ind
-        g.Y[c,:] = y[i,:]
+        g.Y[c,:] = y[Int(i),:]
         c +=1
     end
     return TreeBase(g)
 end
 
 function TreeBase(d::UI8I,υ::Ar1UI8I) # index label for tree
-    μ = BaseTree(Array{Array{UInt8,1},1}(d))
+    μ = BaseTree(Array{Array{UInt8,1},1}(undef,d))
     γ1 = d +0x01
     for ω ∈ 0x01:d
-        μ.μ[ω] = find(ξ->(ξ==γ1-ω),υ)
+        μ.μ[ω] = findall(ξ->(ξ==γ1-ω),υ)
     end
     return μ
 end
@@ -219,7 +219,7 @@ TreeBase(υ::Ar1UI8I) = TreeBase(length(υ),υ)
 TreeBase(t::PBTree) = TreeBase(t.degr,t.Y)
 
 function TreeBase(d::UI8I,γ::Int,g::Ar2UI8I)
-    μ = Array{BaseTree,1}(γ)
+    μ = Array{BaseTree,1}(undef,γ)
     for η ∈ 1:γ
         μ[η] = TreeBase(d,g[η,:])
     end
@@ -233,7 +233,7 @@ TreeBase(deg::UI8I) = TreeBase(Υ(deg));
 # TreeBase -> Max Integer
 
 ΘMax = ( () -> begin
-        s = Array{Int,1}(1)
+        s = Array{Int,1}(undef,1)
         s[1] = 1
         return ( (d::UI8I) -> begin
                 for n ∈ length(s)+1:d
@@ -268,11 +268,11 @@ end
 Returns the tree integers of any AbstractGrove
 """
 TreeInteger(d::UI8I,s::Integer) = TreeInteger(d,grovebit(d,s))
-TreeInteger(d::UI8I,s::BitArray) = TreeInteger(d,find(s))
+TreeInteger(d::UI8I,s::BitArray) = TreeInteger(d,findall(s))
 
 function TreeInteger(d::UI8I,ind::Array{Int,1}) # from treeindex
     y = ΥI(d)
-    g = Array{Int,1}(length(ind))
+    g = Array{Int,1}(undef,length(ind))
     c = 1
     for i ∈ ind
         g[c] = y[i]
@@ -285,7 +285,7 @@ TreeInteger(μ::BaseTree) = ΘMax(length(μ.μ))-ΘInt(μ.μ)
 
 function TreeInteger(Y::Array{BaseTree,1})
     γ = length(Y)
-    i = Array{Int,1}(γ)
+    i = Array{Int,1}(undef,γ)
     for n ∈ 1:γ
         i[n] = TreeInteger(Y[n])
     end
@@ -307,8 +307,8 @@ TreeRational(d::UI8I,s::Integer) = TreeRational(d,grovebit(d,s))
 function TreeRational(d::UI8I,indb::BitArray) # from treeindex
     y = ΥI(d)
     c = 1
-    ind = find(indb)
-    g = Array{Int,1}(length(ind))
+    ind = findall(indb)
+    g = Array{Int,1}(undef,length(ind))
     for i ∈ ind
         g[c] = y[i]
         c +=1
@@ -321,7 +321,7 @@ TreeRational(deg::UI8I,Θ::Array{Int,1}) = (s=treeshift(); 1-s-((-1)^s)*Θ.//ΘM
 
 function TreeRational(Y::Array{BaseTree,1})
     γ = length(Y)
-    r = Array{Rational,1}(γ)
+    r = Array{Rational,1}(undef,γ)
     for n ∈ 1:γ
         r[n] = TreeRational(Y[n])
     end
@@ -364,7 +364,7 @@ convert(::Type{Array{PBTree,1}},g::Grove) = [trees(g)...] =#
 
 function convert(::Type{Grove},g::Array{PBTree,1})
     length(g) == 0 && return Grove(0)
-    λ = Array{UInt8,2}(length(g),g[1].degr)
+    λ = Array{UInt8,2}(undef,length(g),g[1].degr)
     for i ∈ 1:length(g)
         λ[i,:] = g[i].Y
     end

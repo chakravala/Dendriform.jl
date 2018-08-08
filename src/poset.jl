@@ -225,11 +225,11 @@ function intcomp(d::Int)
     for q ∈ 1:d-1
         for i ∈ 1:Int(groveindex(Grove(q))), j ∈ 1:Int(groveindex(Grove(d-q)))
             z = GroveBin(Grove(q,i) + Grove(d-q,j))
-            f = find(s->s==z.gbin, ins)
+            f = findall(s->s==z.gbin, ins)
             length(f) == 0 ? (cn += 1) : (cc[f] += 1)
         end
     end
-    info("Non-intervals: $cn")
+    @info "Non-intervals: $cn"
     return cc
 end
 
@@ -241,11 +241,11 @@ function intcompt(d::Int)
     for q ∈ 1:d-1
         for i ∈ 1:Int(Cn(q)), j ∈ 1:Int(Cn(d-q))
             z = GroveBin(PBTree(q,i) + PBTree(d-q,j))
-            f = find(s->s==z.gbin, ins)
+            f = findall(s->s==z.gbin, ins)
             length(f) == 0 ? (cn += 1) : (cc[f] += 1)
         end
     end
-    #info("Non-intervals: $cn")
+    #@info "Non-intervals: $cn"
     return cc
 end
 
@@ -276,21 +276,21 @@ end
 function print_interval_bin(d::Int)
     ins = intervals(d)
     for i ∈ ins
-        lpad(bin(i),Cn(d),"0") |> println
+        lpad(string(i,base=2),Cn(d),"0") |> println
     end
 end
 
 function print_intcomp_bin(d::Int)
-    ins = intervals(d)[find(s->s>0,intcomp(d))]
-    inst = intervals(d)[find(s->s>0,intcompt(d))]
+    ins = intervals(d)[findall(s->s>0,intcomp(d))]
+    inst = intervals(d)[findall(s->s>0,intcompt(d))]
     for i ∈ ins
-        i ∉ inst && (lpad(bin(i),Cn(d),"0") |> println)
+        i ∉ inst && (lpad(string(i,base=2),Cn(d),"0") |> println)
     end
 end
 
 function print_intcompt_bin(d::Int)
-    ins = intervals(d)[find(s->s>0,intcompt(d))]
+    ins = intervals(d)[findall(s->s>0,intcompt(d))]
     for i ∈ ins
-        lpad(bin(i),Cn(d),"0") |> println
+        lpad(string(i,base=2),Cn(d),"0") |> println
     end
 end

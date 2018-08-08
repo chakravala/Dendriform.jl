@@ -95,7 +95,7 @@ Looks up  PBTree using degree and tree index
 """
 function PBTree(deg::UI8I,ind::Int)
     treecheck(deg,ind)
-    deg == 0 && (return PBTree(UInt8(deg),Array{UInt8,1}(0)))
+    deg == 0 && (return PBTree(UInt8(deg),Array{UInt8,1}(undef,0)))
     return PBTree(UInt8(deg),Υ(deg).Y[ind,:])
 end
 
@@ -155,7 +155,7 @@ end
 
 function convert(::Type{Grove},t::PBTree)
     d=t.degr
-    return Grove(d,1,(g=Array{Int,2}(1,d); g[1,:]=t.Y[:]; g))
+    return Grove(d,1,(g=Array{Int,2}(undef,1,d); g[1,:]=t.Y[:]; g))
 end
 
 function convert(::Type{Grove},g::Ar2UI8I)
@@ -224,9 +224,9 @@ include("poset.jl")
 # Total Grove Repository
 
 function GroveExtend() # initialize set of total groves
-    Y = Array{Grove,1}(1)
-    Y[1]=Grove(0,0,Array{UInt8,2}(0,1))
-    R = Array{Array{Int,1},1}(0)
+    Y = Array{Grove,1}(undef,1)
+    Y[1]=Grove(0,0,Array{UInt8,2}(undef,0,1))
+    R = Array{Array{Int,1},1}(undef,0)
     return (Y,R)
 end
 
@@ -240,9 +240,9 @@ function GroveExtend!(Y::Array{Grove,1},R::Array{Array{Int,1},1},deg::UInt8)
         fn = floor(Int,n/2)
         lYn = length(Y[n].Y[:,1])
         # initialize total grove
-        Yn = Grove(Array{UInt8,2}(Cn(n),n))
+        Yn = Grove(Array{UInt8,2}(undef,Cn(n),n))
         # loop over left-branch grove
-        n==1 ? Yn.Y[τ,1] = n : Yn.Y[τ:lYn,n] = n
+        n==1 ? (Yn.Y[τ,1] .= n) : (Yn.Y[τ:lYn,n] .= n)
         for λ ∈ 1:lYn
             Yn.Y[τ,1:n-1] = Y[n].Y[λ,:]
             τ += 1
@@ -274,7 +274,7 @@ function GroveExtend!(Y::Array{Grove,1},R::Array{Array{Int,1},1},deg::UInt8)
                     τ += 1
         end; end; end
         # loop over right-branch grove
-        Yn.Y[τ:τ+lYn-1,1] = n
+        Yn.Y[τ:τ+lYn-1,1] .= n
         for Λ ∈ 1:lYn
             Yn.Y[τ,2:n] = Y[n].Y[Λ,:]
             τ += 1
@@ -310,8 +310,8 @@ end
 (Υ,ΥI,ΥGS) = ( () -> begin
         (Y,R)=GroveExtend()
         return begin
-                (d::UI8I)->(return GroveExtend!(Y,R,UInt8(d))), 
-                (d::UI8I)->(GroveExtend!(Y,R,UInt8(d)); !grovesort() && GroveInteger!(Y,R,UInt8(d)); return d==0 ? Array{Int,1}(0) : R[d]), 
+                (d::UI8I)->(return GroveExtend!(Y,R,UInt8(d))),
+                (d::UI8I)->(GroveExtend!(Y,R,UInt8(d)); !grovesort() && GroveInteger!(Y,R,UInt8(d)); return d==0 ? Array{Int,1}(undef,0) : R[d]),
                 ()->((Y,R)=GroveExtend())
             end
     end)() # provides hidden total grove reference
@@ -334,7 +334,7 @@ function Compose(n::Int,η::Int=n)
             for r ∈ 1:length(g)
                 sm = gsi + Grove(g[r][end].degr,g[r][end].gbin)
                 push!(G,g[r])
-                unshift!(G[u],gbsi)
+                pushfirst!(G[u],gbsi)
                 G[u][end] = GroveBin(sm)
                 u += 1
     end; end; end
@@ -344,7 +344,7 @@ function Compose(n::Int,η::Int=n)
         try
             c[ind]
         catch
-            push!(c,ind=>Array{Integer,1}(0))
+            push!(c,ind=>Array{Integer,1}(undef,0))
         end
         push!(c[ind],k)
     end
@@ -353,12 +353,12 @@ function Compose(n::Int,η::Int=n)
 end
 
 (GroveStore,GroveComp,GroveSums) = ( () -> begin
-        GG=Array{Array{Array{GroveBin,1},1},1}(0)
-        CC=Array{Dict{Integer,Array{Integer,1}},1}(0)
+        GG=Array{Array{Array{GroveBin,1},1},1}(undef,0)
+        CC=Array{Dict{Integer,Array{Integer,1}},1}(undef,0)
         return begin
-                (n::Int,g::Array{Array{GroveBin,1},1},c::Dict{Integer,Array{Integer,1}})->(n==length(GG)+1 && (push!(GG,deepcopy(g)); push!(CC,deepcopy(c)))), 
-                (n::Int)->(Compose(n); (return deepcopy(CC[n]))), 
-                (n::Int)->(n<=length(GG) && n>0x00 ? (return deepcopy(GG[n])) : (return Array{Array{GroveBin,1},1}(0) )  ) 
+                (n::Int,g::Array{Array{GroveBin,1},1},c::Dict{Integer,Array{Integer,1}})->(n==length(GG)+1 && (push!(GG,deepcopy(g)); push!(CC,deepcopy(c)))),
+                (n::Int)->(Compose(n); (return deepcopy(CC[n]))),
+                (n::Int)->(n<=length(GG) && n>0x00 ? (return deepcopy(GG[n])) : (return Array{Array{GroveBin,1},1}(undef,0) )  )
             end
     end)()
 

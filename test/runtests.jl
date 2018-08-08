@@ -1,5 +1,5 @@
 using Dendriform
-using Base.Test
+using Test
 import Dendriform: GroveError, TreeInteger, TreeRational, TreeBase, TreeLoday
 
 d = 5
@@ -74,6 +74,6 @@ grovedisplay(false)
 @test posetnext([1,2,3]) == Grove(3,6)
 @test posetprev([1,2,3]) == Grove(0)
 @test ⊴([1,2,3,4],[4,3,2,1]) == Grove(4)
-@test print(DevNull,PBTree(0,1)) == nothing
+@test print(devnull,PBTree(0,1)) == nothing
 @test Dendriform.intervals_full(3) |> typeof == BitArray{1}
 @test Dendriform.print_interval_bin(3) == Dendriform.print_intcomp_bin(3) == Dendriform.print_intcompt_bin(3)
