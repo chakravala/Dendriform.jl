@@ -108,7 +108,7 @@ grovebit(g::Union{Ar1UI8I,Ar2UI8I}) = grovebit(Grove(g))
 grovebit(g::GroveBin) = grovebit(g.degr,g.gbin)
 
 function grovebit(d::UI8I,s::Integer)
-    gb = '1' .== reverse(collect(string(s,base=2)),dims=1)
+    gb = Ref('1') .== reverse(collect(string(s,base=2)),dims=1)
     return vcat(gb,falses(Cn(d)-length(gb)))
 end
 
@@ -128,7 +128,7 @@ function groveindex(d::UI8I,l::Int,g::Ar2UI8I)
             s += BigInt(2)^(findfirst(v.==gt[c])-1)
         end
     catch
-        treecheck(g) ? throw(DomainError()) : s=BigInt(-1)
+        treecheck(g) ? throw(DomainError(g)) : s=BigInt(-1)
     end
     return s
 end
@@ -193,7 +193,7 @@ TreeLoday(d::UI8I,s::Integer) = Grove(d,s)
 
 Returns BaseTree objects for any AbstractGrove
 """
-TreeBase(d::UI8I,s::Integer) = TreeBase(d,grovebit(findall(s)))
+TreeBase(d::UI8I,s::Integer) = TreeBase(d,grovebit(findall(x->x!=0,s)))
 
 function TreeBase(d::UI8I,ind::BitArray) # from treeindex
     y = Υ(d).Y
@@ -317,7 +317,7 @@ function TreeRational(d::UI8I,indb::BitArray) # from treeindex
 end
 
 TreeRational(μ::BaseTree) = (s=treeshift(); s+((-1)^s)*ΘInt(μ.μ)//ΘMax(length(μ.μ)))
-TreeRational(deg::UI8I,Θ::Array{Int,1}) = (s=treeshift(); 1-s-((-1)^s)*Θ.//ΘMax(deg))
+TreeRational(deg::UI8I,Θ::Array{Int,1}) = (s=treeshift(); 1-s.-((-1)^s)*Θ.//ΘMax(deg))
 
 function TreeRational(Y::Array{BaseTree,1})
     γ = length(Y)

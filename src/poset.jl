@@ -226,7 +226,7 @@ function intcomp(d::Int)
         for i ∈ 1:Int(groveindex(Grove(q))), j ∈ 1:Int(groveindex(Grove(d-q)))
             z = GroveBin(Grove(q,i) + Grove(d-q,j))
             f = findall(s->s==z.gbin, ins)
-            length(f) == 0 ? (cn += 1) : (cc[f] += 1)
+            length(f) == 0 ? (cn += 1) : (cc[f] .+= 1)
         end
     end
     @info "Non-intervals: $cn"
@@ -242,7 +242,7 @@ function intcompt(d::Int)
         for i ∈ 1:Int(Cn(q)), j ∈ 1:Int(Cn(d-q))
             z = GroveBin(PBTree(q,i) + PBTree(d-q,j))
             f = findall(s->s==z.gbin, ins)
-            length(f) == 0 ? (cn += 1) : (cc[f] += 1)
+            length(f) == 0 ? (cn += 1) : (cc[f] .+= 1)
         end
     end
     #@info "Non-intervals: $cn"

@@ -1,5 +1,4 @@
-using Dendriform
-using Test
+using Dendriform, Test
 import Dendriform: GroveError, TreeInteger, TreeRational, TreeBase, TreeLoday
 
 d = 5
@@ -22,7 +21,7 @@ d = 5
 @test Grove(d) |> grovesort! == Grove(d) == Grove(d,2^Cn(d)-1)
 @test Grove(d) == d |> TreeBase |> TreeLoday
 @test (k = Grove(d) |> TreeBase |> TreeLoday; k == k |> TreeBase |> TreeLoday)
-@test TreeLoday(0,Array{Int,1}(0)) == Grove(0)
+@test TreeLoday(0,Array{Int,1}(undef,0)) == Grove(0)
 @test [TreeBase([1:d...])] == TreeBase(d,1)
 @test Grove(d) |> TreeBase |> TreeInteger == Grove(d) |> TreeInteger
 @test (grovesort(false); TreeLoday(d,treeindex(Grove(d))) == Grove(d))

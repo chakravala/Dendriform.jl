@@ -4,7 +4,7 @@ module Dendriform
 # This file is part of Dendriform.jl. It is licensed under the GPL license
 # Dendriform Copyright (C) 2017 Michael Reed
 
-using Combinatorics, Compat
+using Combinatorics
 
 export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovecomposition, grovedisplay
 
@@ -125,6 +125,7 @@ Grove(d::UI8I) = convert(Grove,d)
 Grove(d::UI8I,s::BitArray{1}) = TreeLoday(d,s)
 Grove(g::GroveBin) = convert(Grove,g)
 Grove(s::BitArray{1}) = Grove(CnInv(length(s)),s)
+Grove(g::Grove) = g
 
 """
     Grove(degree::Int, index::Integer)
@@ -242,7 +243,7 @@ function GroveExtend!(Y::Array{Grove,1},R::Array{Array{Int,1},1},deg::UInt8)
         # initialize total grove
         Yn = Grove(Array{UInt8,2}(undef,Cn(n),n))
         # loop over left-branch grove
-        n==1 ? (Yn.Y[τ,1] .= n) : (Yn.Y[τ:lYn,n] .= n)
+        n==1 ? (Yn.Y[τ,1] = n) : (Yn.Y[τ:lYn,n] .= n)
         for λ ∈ 1:lYn
             Yn.Y[τ,1:n-1] = Y[n].Y[λ,:]
             τ += 1
