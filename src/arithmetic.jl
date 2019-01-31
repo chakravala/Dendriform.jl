@@ -2,6 +2,7 @@
 # Dendriform Copyright (C) 2017 Michael Reed
 
 export ∪, ∨, graft, left, right, dashv, vdash, ⊣, ⊢, +, *
+import AbstractLattices: ∨
 
 # union
 

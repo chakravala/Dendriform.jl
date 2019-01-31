@@ -4,7 +4,7 @@ module Dendriform
 # This file is part of Dendriform.jl. It is licensed under the GPL license
 # Dendriform Copyright (C) 2017 Michael Reed
 
-using Combinatorics
+using Combinatorics, AbstractLattices
 
 export PBTree, Grove, GroveBin, ==, Cn, grovesort, grovesort!, σ, print, grovecomposition, grovedisplay
 
