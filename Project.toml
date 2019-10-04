@@ -1,0 +1,17 @@
+name = "Dendriform"
+uuid = "d8da5c1c-6f31-57d0-a642-102aa94a823b"
+authors = ["Michael Reed"]
+version = "0.2.1"
+
+[deps]
+AbstractLattices = "398f06c4-4d28-53ec-89ca-5b2656b7603d"
+Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
+
+[compat]
+julia = "0.7"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
